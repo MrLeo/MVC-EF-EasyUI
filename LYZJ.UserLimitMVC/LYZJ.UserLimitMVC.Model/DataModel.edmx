@@ -1,0 +1,1119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="DataModelStoreContainer">
+          <EntitySet Name="BasePermission" EntityType="DataModel.Store.BasePermission" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="BasePermissionGroup" EntityType="DataModel.Store.BasePermissionGroup" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="BaseRole" EntityType="DataModel.Store.BaseRole" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="BaseUser" EntityType="DataModel.Store.BaseUser" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="R_Group_Permission" EntityType="DataModel.Store.R_Group_Permission" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="R_Group_Role" EntityType="DataModel.Store.R_Group_Role" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="R_Group_User" EntityType="DataModel.Store.R_Group_User" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="R_Role_Permission" EntityType="DataModel.Store.R_Role_Permission" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="R_User_Permission" EntityType="DataModel.Store.R_User_Permission" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="R_User_Role" EntityType="DataModel.Store.R_User_Role" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_BasePermissionGroupR_Group_Permission" Association="DataModel.Store.FK_BasePermissionGroupR_Group_Permission">
+            <End Role="BasePermissionGroup" EntitySet="BasePermissionGroup" />
+            <End Role="R_Group_Permission" EntitySet="R_Group_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BasePermissionGroupR_Group_Role" Association="DataModel.Store.FK_BasePermissionGroupR_Group_Role">
+            <End Role="BasePermissionGroup" EntitySet="BasePermissionGroup" />
+            <End Role="R_Group_Role" EntitySet="R_Group_Role" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BasePermissionGroupR_Group_User" Association="DataModel.Store.FK_BasePermissionGroupR_Group_User">
+            <End Role="BasePermissionGroup" EntitySet="BasePermissionGroup" />
+            <End Role="R_Group_User" EntitySet="R_Group_User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BasePermissionR_Group_Permission" Association="DataModel.Store.FK_BasePermissionR_Group_Permission">
+            <End Role="BasePermission" EntitySet="BasePermission" />
+            <End Role="R_Group_Permission" EntitySet="R_Group_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BasePermissionR_Role_Permission" Association="DataModel.Store.FK_BasePermissionR_Role_Permission">
+            <End Role="BasePermission" EntitySet="BasePermission" />
+            <End Role="R_Role_Permission" EntitySet="R_Role_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BaseRoleR_Group_Role" Association="DataModel.Store.FK_BaseRoleR_Group_Role">
+            <End Role="BaseRole" EntitySet="BaseRole" />
+            <End Role="R_Group_Role" EntitySet="R_Group_Role" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BaseRoleR_Role_Permission" Association="DataModel.Store.FK_BaseRoleR_Role_Permission">
+            <End Role="BaseRole" EntitySet="BaseRole" />
+            <End Role="R_Role_Permission" EntitySet="R_Role_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BaseUserR_Group_User" Association="DataModel.Store.FK_BaseUserR_Group_User">
+            <End Role="BaseUser" EntitySet="BaseUser" />
+            <End Role="R_Group_User" EntitySet="R_Group_User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_R_UserInfo_ActionInfoActionInfo" Association="DataModel.Store.FK_R_UserInfo_ActionInfoActionInfo">
+            <End Role="BasePermission" EntitySet="BasePermission" />
+            <End Role="R_User_Permission" EntitySet="R_User_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoleR_UserInfo_Role" Association="DataModel.Store.FK_RoleR_UserInfo_Role">
+            <End Role="BaseRole" EntitySet="BaseRole" />
+            <End Role="R_User_Role" EntitySet="R_User_Role" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInfoR_UserInfo_ActionInfo" Association="DataModel.Store.FK_UserInfoR_UserInfo_ActionInfo">
+            <End Role="BaseUser" EntitySet="BaseUser" />
+            <End Role="R_User_Permission" EntitySet="R_User_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInfoR_UserInfo_Role" Association="DataModel.Store.FK_UserInfoR_UserInfo_Role">
+            <End Role="BaseUser" EntitySet="BaseUser" />
+            <End Role="R_User_Role" EntitySet="R_User_Role" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="BasePermission">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="varchar" MaxLength="50" />
+          <Property Name="RequestURL" Type="varchar" MaxLength="256" />
+          <Property Name="RequestHttpType" Type="int" />
+          <Property Name="PerMission" Type="nvarchar" MaxLength="50" />
+          <Property Name="AllowEdit" Type="int" />
+          <Property Name="AllowDelete" Type="int" />
+          <Property Name="IsVisible" Type="int" />
+          <Property Name="SortCode" Type="int" />
+          <Property Name="DeletionStateCode" Type="smallint" />
+          <Property Name="Enabled" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="800" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActionType" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BasePermissionGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="GroupName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="GroupType" Type="smallint" Nullable="false" />
+          <Property Name="AllowEdit" Type="int" />
+          <Property Name="AllowDelete" Type="int" />
+          <Property Name="IsVisible" Type="int" />
+          <Property Name="SortCode" Type="int" />
+          <Property Name="DeletionStateCode" Type="smallint" />
+          <Property Name="Enabled" Type="int" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="Description" Type="nvarchar" MaxLength="800" />
+        </EntityType>
+        <EntityType Name="BaseRole">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="OrganizeId" Type="int" />
+          <Property Name="CategoryCode" Type="int" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" />
+          <Property Name="Realname" Type="nvarchar" MaxLength="100" />
+          <Property Name="AllowEdit" Type="int" />
+          <Property Name="AllowDelete" Type="int" />
+          <Property Name="IsVisible" Type="int" />
+          <Property Name="SortCode" Type="int" />
+          <Property Name="DeletionStateCode" Type="int" />
+          <Property Name="Enabled" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="800" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BaseUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="32" />
+          <Property Name="UserPassword" Type="nvarchar" MaxLength="200" />
+          <Property Name="RealName" Type="nvarchar" MaxLength="50" />
+          <Property Name="QuickQuery" Type="nvarchar" MaxLength="100" />
+          <Property Name="SecurityLevel" Type="int" />
+          <Property Name="UserFrom" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SubCompanyID" Type="int" />
+          <Property Name="SubCompanyName" Type="nvarchar(max)" />
+          <Property Name="DepartmentID" Type="int" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="50" />
+          <Property Name="WorkgroupID" Type="int" />
+          <Property Name="WorkgroupName" Type="nvarchar" MaxLength="50" />
+          <Property Name="WorkCategory" Type="nvarchar" MaxLength="50" />
+          <Property Name="ChangePasswordDate" Type="datetime" />
+          <Property Name="Duty" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="Lang" Type="nvarchar" MaxLength="50" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="8" />
+          <Property Name="Birthday" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="32" />
+          <Property Name="Telephone" Type="nvarchar" MaxLength="32" />
+          <Property Name="QICQ" Type="nvarchar" MaxLength="50" />
+          <Property Name="HomeAddress" Type="nvarchar" MaxLength="200" />
+          <Property Name="Theme" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsStaff" Type="int" />
+          <Property Name="IsVisible" Type="int" />
+          <Property Name="UserAddRessID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Enabled" Type="int" />
+          <Property Name="AuditStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="DeletionStateCode" Type="int" />
+          <Property Name="Signature" Type="nvarchar" MaxLength="200" />
+          <Property Name="SortCode" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="800" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifirdOn" Type="datetime" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="R_Group_Permission">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="GroupID" Type="int" Nullable="false" />
+          <Property Name="PermissionID" Type="int" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="BasePermissionID" Type="int" Nullable="false" />
+          <Property Name="BasePermissionGroupID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="R_Group_Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="GroupID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="BaseRoleID" Type="int" Nullable="false" />
+          <Property Name="BasePermissionID" Type="int" Nullable="false" />
+          <Property Name="BasePermissionGroupID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="R_Group_User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="GroupID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="BaseUserID" Type="int" Nullable="false" />
+          <Property Name="BasePermissionGroupID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="R_Role_Permission">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="PermissionID" Type="int" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="R_User_Permission">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="PermissionID" Type="int" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="R_User_Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime" />
+          <Property Name="CreateUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar(max)" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_BasePermissionGroupR_Group_Permission">
+          <End Role="BasePermissionGroup" Type="DataModel.Store.BasePermissionGroup" Multiplicity="1" />
+          <End Role="R_Group_Permission" Type="DataModel.Store.R_Group_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermissionGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_Permission">
+              <PropertyRef Name="BasePermissionGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BasePermissionGroupR_Group_Role">
+          <End Role="BasePermissionGroup" Type="DataModel.Store.BasePermissionGroup" Multiplicity="1" />
+          <End Role="R_Group_Role" Type="DataModel.Store.R_Group_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermissionGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_Role">
+              <PropertyRef Name="BasePermissionGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BasePermissionGroupR_Group_User">
+          <End Role="BasePermissionGroup" Type="DataModel.Store.BasePermissionGroup" Multiplicity="1" />
+          <End Role="R_Group_User" Type="DataModel.Store.R_Group_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermissionGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_User">
+              <PropertyRef Name="BasePermissionGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BasePermissionR_Group_Permission">
+          <End Role="BasePermission" Type="DataModel.Store.BasePermission" Multiplicity="1" />
+          <End Role="R_Group_Permission" Type="DataModel.Store.R_Group_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermission">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_Permission">
+              <PropertyRef Name="BasePermissionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BasePermissionR_Role_Permission">
+          <End Role="BasePermission" Type="DataModel.Store.BasePermission" Multiplicity="1" />
+          <End Role="R_Role_Permission" Type="DataModel.Store.R_Role_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermission">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Role_Permission">
+              <PropertyRef Name="PermissionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BaseRoleR_Group_Role">
+          <End Role="BaseRole" Type="DataModel.Store.BaseRole" Multiplicity="1" />
+          <End Role="R_Group_Role" Type="DataModel.Store.R_Group_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseRole">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_Role">
+              <PropertyRef Name="BaseRoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BaseRoleR_Role_Permission">
+          <End Role="BaseRole" Type="DataModel.Store.BaseRole" Multiplicity="1" />
+          <End Role="R_Role_Permission" Type="DataModel.Store.R_Role_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseRole">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Role_Permission">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BaseUserR_Group_User">
+          <End Role="BaseUser" Type="DataModel.Store.BaseUser" Multiplicity="1" />
+          <End Role="R_Group_User" Type="DataModel.Store.R_Group_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_User">
+              <PropertyRef Name="BaseUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_R_UserInfo_ActionInfoActionInfo">
+          <End Role="BasePermission" Type="DataModel.Store.BasePermission" Multiplicity="1" />
+          <End Role="R_User_Permission" Type="DataModel.Store.R_User_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermission">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_User_Permission">
+              <PropertyRef Name="PermissionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoleR_UserInfo_Role">
+          <End Role="BaseRole" Type="DataModel.Store.BaseRole" Multiplicity="1" />
+          <End Role="R_User_Role" Type="DataModel.Store.R_User_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseRole">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_User_Role">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfoR_UserInfo_ActionInfo">
+          <End Role="BaseUser" Type="DataModel.Store.BaseUser" Multiplicity="1" />
+          <End Role="R_User_Permission" Type="DataModel.Store.R_User_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_User_Permission">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfoR_UserInfo_Role">
+          <End Role="BaseUser" Type="DataModel.Store.BaseUser" Multiplicity="1" />
+          <End Role="R_User_Role" Type="DataModel.Store.R_User_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_User_Role">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="DataModelContainer1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BaseUser" EntityType="DataModel.BaseUser" />
+          <EntitySet Name="R_User_Role" EntityType="DataModel.R_User_Role" />
+          <EntitySet Name="BaseRole" EntityType="DataModel.BaseRole" />
+          <AssociationSet Name="UserInfoR_UserInfo_Role" Association="DataModel.UserInfoR_UserInfo_Role">
+            <End Role="UserInfo" EntitySet="BaseUser" />
+            <End Role="R_UserInfo_Role" EntitySet="R_User_Role" />
+          </AssociationSet>
+          <AssociationSet Name="RoleR_UserInfo_Role" Association="DataModel.RoleR_UserInfo_Role">
+            <End Role="Role" EntitySet="BaseRole" />
+            <End Role="R_UserInfo_Role" EntitySet="R_User_Role" />
+          </AssociationSet>
+          <EntitySet Name="BasePermission" EntityType="DataModel.BasePermission" />
+          <EntitySet Name="R_User_Permission" EntityType="DataModel.R_User_Permission" />
+          <AssociationSet Name="UserInfoR_UserInfo_ActionInfo" Association="DataModel.UserInfoR_UserInfo_ActionInfo">
+            <End Role="UserInfo" EntitySet="BaseUser" />
+            <End Role="R_UserInfo_ActionInfo" EntitySet="R_User_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="R_UserInfo_ActionInfoActionInfo" Association="DataModel.R_UserInfo_ActionInfoActionInfo">
+            <End Role="R_UserInfo_ActionInfo" EntitySet="R_User_Permission" />
+            <End Role="ActionInfo" EntitySet="BasePermission" />
+          </AssociationSet>
+          <EntitySet Name="R_Role_Permission" EntityType="DataModel.R_Role_Permission" />
+          <AssociationSet Name="BaseRoleR_Role_Permission" Association="DataModel.BaseRoleR_Role_Permission">
+            <End Role="BaseRole" EntitySet="BaseRole" />
+            <End Role="R_Role_Permission" EntitySet="R_Role_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="BasePermissionR_Role_Permission" Association="DataModel.BasePermissionR_Role_Permission">
+            <End Role="BasePermission" EntitySet="BasePermission" />
+            <End Role="R_Role_Permission" EntitySet="R_Role_Permission" />
+          </AssociationSet>
+          <EntitySet Name="BasePermissionGroup" EntityType="DataModel.BasePermissionGroup" />
+          <EntitySet Name="R_Group_Permission" EntityType="DataModel.R_Group_Permission" />
+          <AssociationSet Name="BasePermissionR_Group_Permission" Association="DataModel.BasePermissionR_Group_Permission">
+            <End Role="BasePermission" EntitySet="BasePermission" />
+            <End Role="R_Group_Permission" EntitySet="R_Group_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="BasePermissionGroupR_Group_Permission" Association="DataModel.BasePermissionGroupR_Group_Permission">
+            <End Role="BasePermissionGroup" EntitySet="BasePermissionGroup" />
+            <End Role="R_Group_Permission" EntitySet="R_Group_Permission" />
+          </AssociationSet>
+          <EntitySet Name="R_Group_User" EntityType="DataModel.R_Group_User" />
+          <AssociationSet Name="BaseUserR_Group_User" Association="DataModel.BaseUserR_Group_User">
+            <End Role="BaseUser" EntitySet="BaseUser" />
+            <End Role="R_Group_User" EntitySet="R_Group_User" />
+          </AssociationSet>
+          <AssociationSet Name="BasePermissionGroupR_Group_User" Association="DataModel.BasePermissionGroupR_Group_User">
+            <End Role="BasePermissionGroup" EntitySet="BasePermissionGroup" />
+            <End Role="R_Group_User" EntitySet="R_Group_User" />
+          </AssociationSet>
+          <EntitySet Name="R_Group_Role" EntityType="DataModel.R_Group_Role" />
+          <AssociationSet Name="BaseRoleR_Group_Role" Association="DataModel.BaseRoleR_Group_Role">
+            <End Role="BaseRole" EntitySet="BaseRole" />
+            <End Role="R_Group_Role" EntitySet="R_Group_Role" />
+          </AssociationSet>
+          <AssociationSet Name="BasePermissionGroupR_Group_Role" Association="DataModel.BasePermissionGroupR_Group_Role">
+            <End Role="BasePermissionGroup" EntitySet="BasePermissionGroup" />
+            <End Role="R_Group_Role" EntitySet="R_Group_Role" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="BaseUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="32" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="UserPassword" Nullable="true" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="RealName" MaxLength="50" Nullable="true" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="QuickQuery" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Type="Int32" Name="SecurityLevel" Nullable="true" DefaultValue="9" />
+          <Property Type="String" Name="UserFrom" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="R_UserInfo_Role" Relationship="DataModel.UserInfoR_UserInfo_Role" FromRole="UserInfo" ToRole="R_UserInfo_Role" />
+          <NavigationProperty Name="R_UserInfo_ActionInfo" Relationship="DataModel.UserInfoR_UserInfo_ActionInfo" FromRole="UserInfo" ToRole="R_UserInfo_ActionInfo" />
+          <Property Type="Int32" Name="CompanyID" Nullable="true" />
+          <Property Type="String" Name="CompanyName" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="Int32" Name="SubCompanyID" Nullable="true" />
+          <Property Type="String" Name="SubCompanyName" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="Int32" Name="DepartmentID" Nullable="true" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="Int32" Name="WorkgroupID" Nullable="true" />
+          <Property Type="String" Name="WorkgroupName" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="WorkCategory" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="ChangePasswordDate" Nullable="true" Precision="3" />
+          <Property Type="String" Name="Duty" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Title" MaxLength="50" Nullable="true" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Lang" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="8" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Birthday" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Mobile" MaxLength="32" Nullable="true" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Telephone" MaxLength="32" Nullable="true" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="QICQ" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="HomeAddress" Nullable="true" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Theme" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="Int32" Name="IsStaff" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="IsVisible" Nullable="true" DefaultValue="1" />
+          <Property Type="String" Name="UserAddRessID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="Int32" Name="Enabled" Nullable="true" DefaultValue="1" />
+          <Property Type="String" Name="AuditStatus" Nullable="true" DefaultValue="已审核" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="Int32" Name="DeletionStateCode" Nullable="true" />
+          <Property Type="String" Name="Signature" Nullable="true" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Type="Int32" Name="SortCode" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="800" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="ModifirdOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="R_Group_User" Relationship="DataModel.BaseUserR_Group_User" FromRole="BaseUser" ToRole="R_Group_User" />
+        </EntityType>
+        <EntityType Name="R_User_Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <NavigationProperty Name="UserInfo" Relationship="DataModel.UserInfoR_UserInfo_Role" FromRole="R_UserInfo_Role" ToRole="UserInfo" />
+          <NavigationProperty Name="Role" Relationship="DataModel.RoleR_UserInfo_Role" FromRole="R_UserInfo_Role" ToRole="Role" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="CreateBy" Nullable="true" DefaultValue="50" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="ModifiedOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="BaseRole">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="OrganizeId" Nullable="true" />
+          <Property Type="Int32" Name="CategoryCode" Nullable="true" DefaultValue="0" />
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Realname" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="R_UserInfo_Role" Relationship="DataModel.RoleR_UserInfo_Role" FromRole="Role" ToRole="R_UserInfo_Role" />
+          <Property Type="Int32" Name="AllowEdit" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="AllowDelete" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="IsVisible" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="SortCode" Nullable="true" />
+          <Property Type="Int32" Name="DeletionStateCode" Nullable="true" DefaultValue="0" />
+          <Property Type="Int32" Name="Enabled" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="800" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="ModifiedOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="R_Role_Permission" Relationship="DataModel.BaseRoleR_Role_Permission" FromRole="BaseRole" ToRole="R_Role_Permission" />
+          <NavigationProperty Name="R_Group_Role" Relationship="DataModel.BaseRoleR_Group_Role" FromRole="BaseRole" ToRole="R_Group_Role" />
+        </EntityType>
+        <Association Name="UserInfoR_UserInfo_Role">
+          <End Type="DataModel.BaseUser" Role="UserInfo" Multiplicity="1" />
+          <End Type="DataModel.R_User_Role" Role="R_UserInfo_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_UserInfo_Role">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RoleR_UserInfo_Role">
+          <End Type="DataModel.BaseRole" Role="Role" Multiplicity="1" />
+          <End Type="DataModel.R_User_Role" Role="R_UserInfo_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_UserInfo_Role">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="BasePermission">
+          <Documentation>
+            <LongDescription>权限动作</LongDescription>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" >
+          </Property>
+          <Property Type="String" Name="Code" MaxLength="50" Nullable="true" Unicode="false" FixedLength="false" >
+          </Property>
+          <Property Type="String" Name="RequestURL" Nullable="true" MaxLength="256" Unicode="false" DefaultValue="" FixedLength="false" />
+          <Property Type="Int32" Name="RequestHttpType" Nullable="true" DefaultValue="0" />
+          <Property Type="String" Name="PerMission" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="R_UserInfo_ActionInfo" Relationship="DataModel.R_UserInfo_ActionInfoActionInfo" FromRole="ActionInfo" ToRole="R_UserInfo_ActionInfo" />
+          <Property Type="Int32" Name="AllowEdit" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="AllowDelete" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="IsVisible" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="SortCode" Nullable="true" />
+          <Property Type="Int16" Name="DeletionStateCode" Nullable="true" DefaultValue="0" />
+          <Property Type="Int32" Name="Enabled" Nullable="true" DefaultValue="1" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="800" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="ModifiedOn" Precision="3" Nullable="true" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="R_Role_Permission" Relationship="DataModel.BasePermissionR_Role_Permission" FromRole="BasePermission" ToRole="R_Role_Permission" />
+          <Property Type="Int16" Name="ActionType" Nullable="false" DefaultValue="0" >
+            <Documentation>
+              <LongDescription>0表示普通权限，1表示菜单权限</LongDescription>
+            </Documentation>
+          </Property>
+          <NavigationProperty Name="R_Group_Permission" Relationship="DataModel.BasePermissionR_Group_Permission" FromRole="BasePermission" ToRole="R_Group_Permission" />
+        </EntityType>
+        <EntityType Name="R_User_Permission">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="UserInfo" Relationship="DataModel.UserInfoR_UserInfo_ActionInfo" FromRole="R_UserInfo_ActionInfo" ToRole="UserInfo" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <NavigationProperty Name="ActionInfo" Relationship="DataModel.R_UserInfo_ActionInfoActionInfo" FromRole="R_UserInfo_ActionInfo" ToRole="ActionInfo" />
+          <Property Type="Int32" Name="PermissionID" Nullable="false" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="ModifiedOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <Association Name="UserInfoR_UserInfo_ActionInfo">
+          <End Type="DataModel.BaseUser" Role="UserInfo" Multiplicity="1" />
+          <End Type="DataModel.R_User_Permission" Role="R_UserInfo_ActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_UserInfo_ActionInfo">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_UserInfo_ActionInfoActionInfo">
+          <End Type="DataModel.R_User_Permission" Role="R_UserInfo_ActionInfo" Multiplicity="*" />
+          <End Type="DataModel.BasePermission" Role="ActionInfo" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="ActionInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_UserInfo_ActionInfo">
+              <PropertyRef Name="PermissionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="R_Role_Permission">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="BaseRole" Relationship="DataModel.BaseRoleR_Role_Permission" FromRole="R_Role_Permission" ToRole="BaseRole" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <NavigationProperty Name="BasePermission" Relationship="DataModel.BasePermissionR_Role_Permission" FromRole="R_Role_Permission" ToRole="BasePermission" />
+          <Property Type="Int32" Name="PermissionID" Nullable="false" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="ModifiedOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <Association Name="BaseRoleR_Role_Permission">
+          <End Type="DataModel.BaseRole" Role="BaseRole" Multiplicity="1" />
+          <End Type="DataModel.R_Role_Permission" Role="R_Role_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseRole">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Role_Permission">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BasePermissionR_Role_Permission">
+          <End Type="DataModel.BasePermission" Role="BasePermission" Multiplicity="1" />
+          <End Type="DataModel.R_Role_Permission" Role="R_Role_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermission">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Role_Permission">
+              <PropertyRef Name="PermissionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="BasePermissionGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="GroupName" Nullable="false" Unicode="true" MaxLength="Max" FixedLength="false" />
+          <Property Type="Int16" Name="GroupType" Nullable="false" DefaultValue="1" >
+            <Documentation>
+              <LongDescription>1普通 2特殊</LongDescription>
+            </Documentation>
+          </Property>
+          <Property Type="Int32" Name="AllowEdit" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="AllowDelete" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="IsVisible" Nullable="true" DefaultValue="1" />
+          <Property Type="Int32" Name="SortCode" Nullable="true" />
+          <Property Type="Int16" Name="DeletionStateCode" Nullable="true" DefaultValue="0" />
+          <Property Type="Int32" Name="Enabled" Nullable="true" DefaultValue="1" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ModifiedOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="800" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="R_Group_Permission" Relationship="DataModel.BasePermissionGroupR_Group_Permission" FromRole="BasePermissionGroup" ToRole="R_Group_Permission" />
+          <NavigationProperty Name="R_Group_User" Relationship="DataModel.BasePermissionGroupR_Group_User" FromRole="BasePermissionGroup" ToRole="R_Group_User" />
+          <NavigationProperty Name="R_Group_Role" Relationship="DataModel.BasePermissionGroupR_Group_Role" FromRole="BasePermissionGroup" ToRole="R_Group_Role" />
+        </EntityType>
+        <EntityType Name="R_Group_Permission">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="GroupID" Nullable="false" />
+          <Property Type="Int32" Name="PermissionID" Nullable="false" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ModifiedOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BasePermission" Relationship="DataModel.BasePermissionR_Group_Permission" FromRole="R_Group_Permission" ToRole="BasePermission" />
+          <Property Type="Int32" Name="BasePermissionID" Nullable="false" />
+          <NavigationProperty Name="BasePermissionGroup" Relationship="DataModel.BasePermissionGroupR_Group_Permission" FromRole="R_Group_Permission" ToRole="BasePermissionGroup" />
+          <Property Type="Int32" Name="BasePermissionGroupID" Nullable="false" />
+        </EntityType>
+        <Association Name="BasePermissionR_Group_Permission">
+          <End Type="DataModel.BasePermission" Role="BasePermission" Multiplicity="1" />
+          <End Type="DataModel.R_Group_Permission" Role="R_Group_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermission">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_Permission">
+              <PropertyRef Name="BasePermissionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BasePermissionGroupR_Group_Permission">
+          <End Type="DataModel.BasePermissionGroup" Role="BasePermissionGroup" Multiplicity="1" />
+          <End Type="DataModel.R_Group_Permission" Role="R_Group_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermissionGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_Permission">
+              <PropertyRef Name="BasePermissionGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="R_Group_User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="GroupID" Nullable="false" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ModifiedOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BaseUser" Relationship="DataModel.BaseUserR_Group_User" FromRole="R_Group_User" ToRole="BaseUser" />
+          <Property Type="Int32" Name="BaseUserID" Nullable="false" />
+          <NavigationProperty Name="BasePermissionGroup" Relationship="DataModel.BasePermissionGroupR_Group_User" FromRole="R_Group_User" ToRole="BasePermissionGroup" />
+          <Property Type="Int32" Name="BasePermissionGroupID" Nullable="false" />
+        </EntityType>
+        <Association Name="BaseUserR_Group_User">
+          <End Type="DataModel.BaseUser" Role="BaseUser" Multiplicity="1" />
+          <End Type="DataModel.R_Group_User" Role="R_Group_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_User">
+              <PropertyRef Name="BaseUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BasePermissionGroupR_Group_User">
+          <End Type="DataModel.BasePermissionGroup" Role="BasePermissionGroup" Multiplicity="1" />
+          <End Type="DataModel.R_Group_User" Role="R_Group_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermissionGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_User">
+              <PropertyRef Name="BasePermissionGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="R_Group_Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="GroupID" Nullable="false" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" />
+          <Property Type="DateTime" Name="CreateOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="CreateUserID" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CreateBy" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ModifiedOn" Nullable="true" Precision="3" />
+          <Property Type="String" Name="ModifiedUserID" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ModifiedBy" Nullable="true" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BaseRole" Relationship="DataModel.BaseRoleR_Group_Role" FromRole="R_Group_Role" ToRole="BaseRole" />
+          <Property Type="Int32" Name="BaseRoleID" Nullable="false" />
+          <Property Type="Int32" Name="BasePermissionID" Nullable="false" />
+          <NavigationProperty Name="BasePermissionGroup" Relationship="DataModel.BasePermissionGroupR_Group_Role" FromRole="R_Group_Role" ToRole="BasePermissionGroup" />
+          <Property Type="Int32" Name="BasePermissionGroupID" Nullable="false" />
+        </EntityType>
+        <Association Name="BaseRoleR_Group_Role">
+          <End Type="DataModel.BaseRole" Role="BaseRole" Multiplicity="1" />
+          <End Type="DataModel.R_Group_Role" Role="R_Group_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BaseRole">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_Role">
+              <PropertyRef Name="BaseRoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BasePermissionGroupR_Group_Role">
+          <End Type="DataModel.BasePermissionGroup" Role="BasePermissionGroup" Multiplicity="1" />
+          <End Type="DataModel.R_Group_Role" Role="R_Group_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasePermissionGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_Group_Role">
+              <PropertyRef Name="BasePermissionGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DataModelStoreContainer" CdmEntityContainer="DataModelContainer1">
+    <EntitySetMapping Name="BaseUser">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.BaseUser)">
+        <MappingFragment StoreEntitySet="BaseUser">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+          <ScalarProperty Name="RealName" ColumnName="RealName" />
+          <ScalarProperty Name="QuickQuery" ColumnName="QuickQuery" />
+          <ScalarProperty Name="SecurityLevel" ColumnName="SecurityLevel" />
+          <ScalarProperty Name="UserFrom" ColumnName="UserFrom" />
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <ScalarProperty Name="SubCompanyID" ColumnName="SubCompanyID" />
+          <ScalarProperty Name="SubCompanyName" ColumnName="SubCompanyName" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+          <ScalarProperty Name="WorkgroupID" ColumnName="WorkgroupID" />
+          <ScalarProperty Name="WorkgroupName" ColumnName="WorkgroupName" />
+          <ScalarProperty Name="WorkCategory" ColumnName="WorkCategory" />
+          <ScalarProperty Name="ChangePasswordDate" ColumnName="ChangePasswordDate" />
+          <ScalarProperty Name="Duty" ColumnName="Duty" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Lang" ColumnName="Lang" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+          <ScalarProperty Name="QICQ" ColumnName="QICQ" />
+          <ScalarProperty Name="HomeAddress" ColumnName="HomeAddress" />
+          <ScalarProperty Name="Theme" ColumnName="Theme" />
+          <ScalarProperty Name="IsStaff" ColumnName="IsStaff" />
+          <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+          <ScalarProperty Name="UserAddRessID" ColumnName="UserAddRessID" />
+          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
+          <ScalarProperty Name="DeletionStateCode" ColumnName="DeletionStateCode" />
+          <ScalarProperty Name="Signature" ColumnName="Signature" />
+          <ScalarProperty Name="SortCode" ColumnName="SortCode" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifirdOn" ColumnName="ModifirdOn" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="R_User_Role">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.R_User_Role)">
+        <MappingFragment StoreEntitySet="R_User_Role">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BaseRole">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.BaseRole)">
+        <MappingFragment StoreEntitySet="BaseRole">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="OrganizeId" ColumnName="OrganizeId" />
+          <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="Realname" ColumnName="Realname" />
+          <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
+          <ScalarProperty Name="AllowDelete" ColumnName="AllowDelete" />
+          <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+          <ScalarProperty Name="SortCode" ColumnName="SortCode" />
+          <ScalarProperty Name="DeletionStateCode" ColumnName="DeletionStateCode" />
+          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BasePermission">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.BasePermission)">
+        <MappingFragment StoreEntitySet="BasePermission">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="RequestURL" ColumnName="RequestURL" />
+          <ScalarProperty Name="RequestHttpType" ColumnName="RequestHttpType" />
+          <ScalarProperty Name="PerMission" ColumnName="PerMission" />
+          <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
+          <ScalarProperty Name="AllowDelete" ColumnName="AllowDelete" />
+          <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+          <ScalarProperty Name="SortCode" ColumnName="SortCode" />
+          <ScalarProperty Name="DeletionStateCode" ColumnName="DeletionStateCode" />
+          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ActionType" ColumnName="ActionType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="R_User_Permission">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.R_User_Permission)">
+        <MappingFragment StoreEntitySet="R_User_Permission">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="R_Role_Permission">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.R_Role_Permission)">
+        <MappingFragment StoreEntitySet="R_Role_Permission">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BasePermissionGroup">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.BasePermissionGroup)">
+        <MappingFragment StoreEntitySet="BasePermissionGroup">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+          <ScalarProperty Name="AllowEdit" ColumnName="AllowEdit" />
+          <ScalarProperty Name="AllowDelete" ColumnName="AllowDelete" />
+          <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+          <ScalarProperty Name="SortCode" ColumnName="SortCode" />
+          <ScalarProperty Name="DeletionStateCode" ColumnName="DeletionStateCode" />
+          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="R_Group_Permission">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.R_Group_Permission)">
+        <MappingFragment StoreEntitySet="R_Group_Permission">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="BasePermissionID" ColumnName="BasePermissionID" />
+          <ScalarProperty Name="BasePermissionGroupID" ColumnName="BasePermissionGroupID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="R_Group_User">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.R_Group_User)">
+        <MappingFragment StoreEntitySet="R_Group_User">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="BaseUserID" ColumnName="BaseUserID" />
+          <ScalarProperty Name="BasePermissionGroupID" ColumnName="BasePermissionGroupID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="R_Group_Role">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.R_Group_Role)">
+        <MappingFragment StoreEntitySet="R_Group_Role">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+          <ScalarProperty Name="ModifiedUserID" ColumnName="ModifiedUserID" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="BaseRoleID" ColumnName="BaseRoleID" />
+          <ScalarProperty Name="BasePermissionID" ColumnName="BasePermissionID" />
+          <ScalarProperty Name="BasePermissionGroupID" ColumnName="BasePermissionGroupID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

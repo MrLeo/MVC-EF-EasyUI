@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="49fb5bba973c4ea7b5ab3c2fe389af98" Name="关系图1" ZoomLevel="59" >
+        <EntityTypeShape EntityType="DataModel.BaseUser" Width="2" PointX="0.5" PointY="0.5" FillColor="Red" />
+        <EntityTypeShape EntityType="DataModel.R_User_Role" Width="1.75" PointX="3" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataModel.BaseRole" Width="1.75" PointX="8.75" PointY="5.5" FillColor="Red" />
+        <AssociationConnector Association="DataModel.UserInfoR_UserInfo_Role" />
+        <AssociationConnector Association="DataModel.RoleR_UserInfo_Role" />
+        <EntityTypeShape EntityType="DataModel.BasePermission" Width="1.625" PointX="7.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DataModel.R_User_Permission" Width="1.75" PointX="3.375" PointY="1.625" FillColor="255, 128, 128" />
+        <AssociationConnector Association="DataModel.UserInfoR_UserInfo_ActionInfo" />
+        <AssociationConnector Association="DataModel.R_UserInfo_ActionInfoActionInfo" />
+        <EntityTypeShape EntityType="DataModel.R_Role_Permission" Width="1.875" PointX="5" PointY="4.875" />
+        <AssociationConnector Association="DataModel.BaseRoleR_Role_Permission" />
+        <AssociationConnector Association="DataModel.BasePermissionR_Role_Permission" />
+        <EntityTypeShape EntityType="DataModel.BasePermissionGroup" Width="1.5" PointX="11.125" PointY="0.5" />
+        <EntityTypeShape EntityType="DataModel.R_Group_Permission" Width="1.5" PointX="9.25" PointY="0.875" />
+        <AssociationConnector Association="DataModel.BasePermissionR_Group_Permission" />
+        <AssociationConnector Association="DataModel.BasePermissionGroupR_Group_Permission" />
+        <EntityTypeShape EntityType="DataModel.R_Group_User" Width="1.5" PointX="5.25" PointY="0.5" />
+        <AssociationConnector Association="DataModel.BaseUserR_Group_User" />
+        <AssociationConnector Association="DataModel.BasePermissionGroupR_Group_User" />
+        <EntityTypeShape EntityType="DataModel.R_Group_Role" Width="1.5" PointX="10.875" PointY="5.625" />
+        <AssociationConnector Association="DataModel.BaseRoleR_Group_Role" />
+        <AssociationConnector Association="DataModel.BasePermissionGroupR_Group_Role" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

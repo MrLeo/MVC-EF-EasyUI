@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7C98324B-5259-40F2-8BD2-6C46EE4542BB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LYZJ.UserLimitMVC.BLL</RootNamespace>
+    <AssemblyName>LYZJ.UserLimitMVC.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Lib\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BasePermissionGroupService.cs" />
+    <Compile Include="BasePermissionService.cs" />
+    <Compile Include="BaseService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BaseRoleService.cs" />
+    <Compile Include="BaseUserService.cs" />
+    <Compile Include="Service.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Service.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LYZJ.UserLimitMVC.Common\LYZJ.UserLimitMVC.Common.csproj">
+      <Project>{4e1d919c-59de-4a38-bbaf-067646ca0028}</Project>
+      <Name>LYZJ.UserLimitMVC.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LYZJ.UserLimitMVC.DAL\LYZJ.UserLimitMVC.DAL.csproj">
+      <Project>{96bc7b9f-2736-4598-8d1a-d267d73b1c0f}</Project>
+      <Name>LYZJ.UserLimitMVC.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LYZJ.UserLimitMVC.IBLL\LYZJ.UserLimitMVC.IBLL.csproj">
+      <Project>{e76740b0-ba21-45e5-bbe0-207c92c438dc}</Project>
+      <Name>LYZJ.UserLimitMVC.IBLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LYZJ.UserLimitMVC.IDAL\LYZJ.UserLimitMVC.IDAL.csproj">
+      <Project>{d7339eea-7ca8-4898-ba40-052da33253c0}</Project>
+      <Name>LYZJ.UserLimitMVC.IDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LYZJ.UserLimitMVC.Model\LYZJ.UserLimitMVC.Model.csproj">
+      <Project>{e28a8437-09c3-4447-8d09-598ae5242e32}</Project>
+      <Name>LYZJ.UserLimitMVC.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Service.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

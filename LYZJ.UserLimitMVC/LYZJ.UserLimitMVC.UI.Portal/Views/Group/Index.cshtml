@@ -1,0 +1,604 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*添加Jquery EasyUI的样式*@
+    <link href="@Url.Content("~/Content/JqueryEasyUI/themes/default/easyui.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/JqueryEasyUI/themes/icon.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" />
+
+    @*添加Jquery，EasyUI和easyUI的语言包的JS文件*@
+    <script src="@Url.Content("~/Content/JqueryEasyUI/jquery-1.8.0.min.js")"></script>
+    <script src="@Url.Content("~/Content/JqueryEasyUI/jquery.easyui.min.js")"></script>
+    <script src="@Url.Content("~/Content/JqueryEasyUI/locale/easyui-lang-zh_CN.js")"></script>
+   
+     @*日期格式的引用*@
+    <script src="@Url.Content("~/Content/datapattern.js")"></script>
+
+     @*实现对EasyUI的DataGird控件操作的JS代码*@
+    <script type="text/javascript">
+        $(function () {
+            //当前的页面首次刷新执行的代码
+            initTable();
+
+            //绑定搜索按钮的点击事件
+            BindSerarchLickEvent();
+
+            //添加菜单组数据
+            AddPermissionGroupDialog();
+
+            //修改菜单组数据
+            BindUpdatePermissionInfo();
+        })
+
+        //实现对权限DataGird控件的绑定操作
+        function initTable(queryData) {
+            $('#test').datagrid({
+                url: '/Group/GetAllPermissionGroups',   //指向后台的Action来获取当前用户的信息的Json格式的数据
+                title: '菜单组的展示',
+                iconCls: 'icon-save',
+                height: 368,
+                nowrap: true,
+                autoRowHeight: false,
+                striped: true,
+                collapsible: true,
+                pagination: true,
+                rownumbers: true,
+                sortOrder: 'asc',
+                remoteSort: false,
+                idField: 'ID',
+                queryParams: queryData,  //异步查询的参数
+                frozenColumns: [[
+	                { field: 'ck', checkbox: true },   //选择
+	                { title: '主键', field: 'ID', width: 40, sortable: true },  //主键
+                    { title: '菜单组名称', field: 'GroupName', width: 100, sortable: true },  //权限名称
+                    {
+                        title: '权限类型', field: 'GroupType', width: 80, sortable: true,
+                        formatter: function (value, rows, index) {
+                            if (value == 0) {
+                                return "普通组"
+                            }
+                            if (value == 1) {
+                                return "菜单组"
+                            }
+                            else {
+                                return "未知组"
+                            }
+                        }
+                    },
+                    { title: '排序码', field: 'SortCode', width: 80, sortable: true },
+                    { title: '创建人', field: 'CreateBy', width: 90, sortable: true },
+                    { title: '创建时间', field: 'CreateOn', width: 140, sortable: true },
+                    { title: '最后修改人', field: 'ModifiedBy', width: 90, sortable: true },
+                    { title: '修改时间', field: 'ModifiedOn', width: 140, sortable: true },
+                ]],
+                toolbar: [{
+                    id: 'btnadd',
+                    text: '添加',
+                    iconCls: 'icon-add',
+                    handler: function () {
+                        //实现弹出注册信息的页面
+                        ShowPermissionGroupDialog();
+                    }
+                }, '-', {
+                    id: 'btncut',
+                    text: '修改',
+                    iconCls: 'icon-cut',
+                    handler: function () {
+                        //实现修改的方法
+                        UpdatePermissionGroupDialog();
+                    }
+                }, '-', {
+                    id: 'btnIsNotCancle',
+                    text: '伪删除',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        //实现伪删删除的方法
+                        DeletePermissionGroupInfo("not");
+                    }
+                }, '-', {
+                    id: 'btnCancle',
+                    text: '直接删除',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        //实现直接删除所有数据的方法
+                        DeletePermissionGroupInfo();
+                    }
+                }, '-', {
+                    id: 'btnBrowse',
+                    text: '浏览',
+                    iconCls: 'icon-tip',
+                    handler: function () {
+                        //实现浏览的方法
+                        UpdatePermissionGroupDialog("browse");
+                    }
+                }, '-', {
+                    id: 'btnRecycle',
+                    text: '回收站',
+                    iconCls: 'icon-sum',
+                    handler: function () {
+                        //实现回收站的方法
+                        RecycleBinShow();
+                    }
+                }, '-', {
+                    id: 'btnRestore',
+                    text: '还原',
+                    iconCls: 'icon-back',
+                    handler: function () {
+                        //实现还原的方法
+                        DeletePermissionGroupInfo("back");
+                    }
+                }, '-', {
+                    id: 'btnreload',
+                    text: '刷新',
+                    iconCls: 'icon-reload',
+                    handler: function () {
+                        $("#test").datagrid("reload");
+                    }
+                }]
+            });
+        }
+        
+        //绑定搜索按钮的点击事件
+        function BindSerarchLickEvent() {
+            //按照条件进行查询，首先我们得到数据
+            $("#btnSerach").click(function () {
+                //得到用户输入的参数
+                var queryData = {
+                    GroupName: $("#txtGroupName").val(),
+                    GroupType: $("#txtGroupType").combobox('getValue')
+                };
+                //将值传递给initTable
+                initTable(queryData);
+                return false;
+            });
+        }
+
+        //实现回收站的功能
+        function RecycleBinShow() {
+            var query = { DeletionStateCode: 1 };
+            initTable(query);
+        }
+        
+        //弹出添加框
+        function ShowPermissionGroupDialog() {
+            $("#DivAddPermissionGroup").dialog('open').dialog('setTitle', '添加菜单组');
+        }
+
+        //实现菜单组的添加
+        function AddPermissionGroupDialog() {
+            $("#btnAddPermissionGroup").click(function () {
+                //判断用户的信息是否通过验证
+                var validate = $("#ff").form('validate');
+                if (validate == false) {
+                    return false;
+                }
+                //获取参数传递到后台
+                var postData = $("#ff").serializeArray();
+                //发送异步请求到后台添加菜单组
+                $.post('/Group/AddPermissionGroup', postData, function (data) {
+                    if (data == "OK") {
+                        //添加成功，关闭层，刷新DataGrid，
+                        $("#DivAddPermissionGroup").dialog('close');
+                        $("#test").datagrid('reload');
+                        $("#ff").form('clear');
+                    }
+                    else {
+                        $.messager.alert('失败', '添加菜单组失败，请您检查');
+                    }
+                });
+            });
+        }
+
+        //实现直接删除和伪删除数据的方法
+        function DeletePermissionGroupInfo(not) {
+            //得到用户选择的数据的ID
+            var rows = $("#test").datagrid('getSelections');
+            //首先判断用户是否已经选择了需要删除的数据,然后循环将用户选择的数据传递到后台
+            if (rows.length >= 1) {
+                //遍历用户选择的数据ID,和ActionName，这就是用户选择删除权限组的ID集合
+                var ids = "";  //1,2,3,4,5
+                for (var i = 0; i < rows.length; i++) {
+                    ids += rows[i].ID + ",";
+                }
+                //去掉最后的封号
+                ids = ids.substring(0, ids.length - 1);
+                var GroupNames = "";
+                for (var i = 0; i < rows.length; i++) {
+                    GroupNames += rows[i].GroupName + ",";
+                };
+                GroupNames = GroupNames.substring(0, GroupNames.length - 1);
+                //首先得到是直接删除还是伪删除的参数异步发送到后台
+                var postData = "";
+                if (not == null) {
+                    postData = { ID: ids }
+                }
+                else {
+                    postData = { ID: ids, Not: not };
+                }
+                //然后确认发送异步请求到后天删除数据
+                $.messager.confirm("删除信息", "您确认删除<font color='red' size='3'>" + GroupNames + "</font>角色吗？", function (DeletePerMission) {
+                    if (DeletePerMission) {
+                        //发送异步请求到后台删除数据
+                        $.post("/Group/DeletePermissionGroup", postData, function (data) {
+                            if (data == "OK") {
+                                //友情提示用户删除成功，刷新表哥
+                                $.messager.alert('友情提示', '删除/还原成功');
+                                $("#test").datagrid('reload');
+                                //清除删除的信息
+                                $("#test").datagrid('clearSelections')
+                            }
+                            else {
+                                $.messager.alert('友情提示', data);
+                            }
+                        });
+                    }
+                });
+
+            }
+            else {
+                $.messager.alert('删除/还原', '请选择你要删除/还原的数据');
+            }
+        }
+        
+        //修改菜单组的信息
+        function UpdatePermissionGroupDialog(browse) {
+            //首先选择出我们拿到的ID数组
+            var rows = $("#test").datagrid('getSelections');
+            //首先判断用户只能拿到一条数据
+            if (rows.length != 1) {
+                $.messager.alert("友情提示", "每次只能修改/浏览一条，你已经选择了<font color='red'  size='6'>" + rows.length + "</font>条", "error");
+                return;
+            }
+            if (browse == null) {
+                //弹出修改层，并且显示数据
+                $("#DivUpdatePermissionGroup").dialog('open').dialog('setTitle', '修改菜单项信息');
+                //弹出层的时候绑定弹出层的信息
+                BindShowUpdatePermissionGroupInfo();
+            }
+            else {
+                //弹出修改层，并且显示数据
+                $("#DivBrowserPermissionGroup").dialog('open').dialog('setTitle', '浏览菜单项信息');
+                //弹出层的时候绑定弹出层的信息
+                BindShowBrowserPermissionGroupInfo();
+            }
+        }
+
+        //当弹出修改层的时候，显示需要修改的信息
+        function BindShowUpdatePermissionGroupInfo() {
+            //首先用户发送一个请求到后台去查询信息显示在前台，必须先拿到ID
+            var ID = $("#test").datagrid('getSelections')[0].ID;
+            $.get("/Group/GetPermissionGroupInfo", { ID: ID }, function (permissionGroupInfo) {
+                $("#ID").val(permissionGroupInfo.ID);
+                $("#GroupName1").val(permissionGroupInfo.GroupName);
+                $("#GroupType1").combobox('setValue', permissionGroupInfo.GroupType);
+                $("#SortCode1").val(permissionGroupInfo.SortCode);
+                $("#AllowDelete1").combobox('setValue', permissionGroupInfo.AllowDelete);
+                $("#AllowEdit1").combobox('setValue', permissionGroupInfo.AllowEdit);
+                $("#IsVisible1").combobox('setValue', permissionGroupInfo.IsVisible);
+                $("#Enabled1").combobox('setValue', permissionGroupInfo.Enabled);
+                $("#Description1").val(permissionGroupInfo.Description);
+            });
+        }
+
+        //修改菜单项目的信息
+        function BindUpdatePermissionInfo() {
+            $("#btnUpdatePermissionGroup").click(function () {
+                //首先对用户进行检测
+                var validate = $("#ffUpdate").form('validate');
+                if (validate == false) {
+                    return;
+                }
+                //首先构造参数发送给后台
+                var postData = $("#ffUpdate").serializeArray();
+                $.post("/Group/UpdatePermissionGroup", postData, function (date) {
+                    if (date == "OK") {
+                        //修改成功，关闭层，刷新表格
+                        $.messager.alert('提示', '修改成功');
+                        $('#DivUpdatePermissionGroup').dialog('close');
+                        $('#test').datagrid('reload');
+                    }
+                    else {
+                        $.messager.alert('友情提示', '修改失败，请您检查');
+                    }
+                })
+            });
+        }
+
+        //浏览选择的信息
+        function BindShowBrowserPermissionGroupInfo() {
+            //ID,GroupName,GroupType,SortCode,AllowDelete,AllowEdit,IsVisible,Enabled,Description,
+            //CreateBy2, CreateOn2, ModifiedBy2, ModifirdOn2
+            var ID = $("#test").datagrid('getSelections')[0].ID;
+            $.get("/Group/GetPermissionGroupInfo", { ID: ID }, function (permissionGroupInfo) {
+                $("#ID2").val(permissionGroupInfo.ID);
+                $("#GroupName2").val(permissionGroupInfo.GroupName);
+                $("#GroupType2").combobox('setValue', permissionGroupInfo.GroupType);
+                $("#SortCode2").val(permissionGroupInfo.SortCode);
+                $("#AllowDelete2").combobox('setValue', permissionGroupInfo.AllowDelete);
+                $("#AllowEdit2").combobox('setValue', permissionGroupInfo.AllowEdit);
+                $("#IsVisible2").combobox('setValue', permissionGroupInfo.IsVisible);
+                $("#Enabled2").combobox('setValue', permissionGroupInfo.Enabled);
+                $("#Description2").val(permissionGroupInfo.Description);
+                $("#CreateBy2").val(permissionGroupInfo.CreateBy);
+                $("#ModifiedBy2").val(permissionGroupInfo.ModifiedBy)
+                $("#CreateOn2").datebox('setValue', (eval(permissionGroupInfo.CreateOn.replace(/\/Date\((\d+)\)\//gi, "new Date($1)")).pattern("yyyy-M-d h:m:s")));
+                $("#ModifirdOn2").datebox('setValue', (eval(permissionGroupInfo.ModifiedOn.replace(/\/Date\((\d+)\)\//gi, "new Date($1)")).pattern("yyyy-M-d h:m:s")));
+            });
+        }
+    </script>
+
+</head>
+<body>
+    <!-----------------------EasyUI的DataGird控件的放置----------------------->
+    <div>
+        <!-----------------------搜索框-------------------------->
+        <fieldset>
+            <legend>菜单组详细信息模糊查询</legend>
+            <div>
+                <label for="txtGroupName">菜单组名称：</label>
+                <input type="text" id="txtGroupName" name="txtGroupName" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <label for="txtGroupType">菜单组类型：</label>
+                <select class="easyui-combobox" id="txtGroupType" style="width: 90px;" name="txtGroupType">
+                    <option value="-1">请选择</option>
+                    <option value="0">普通组</option>
+                    <option value="1">菜单组</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="#" class="easyui-linkbutton" iconcls="icon-search" id="btnSerach">模糊搜索</a>
+            </div>
+        </fieldset>
+
+        <!--------------------菜单组详细信息显示----------------------->
+        <table id="test"  style="width: 940px" iconcls="icon-edit">
+        </table>
+    </div>
+
+    <!--------------------------添加权限信息的弹出层---------------------------->
+    <div id="DivAddPermissionGroup" class="easyui-dialog" style="width: 580px; height: 285px; padding: 10px 20px"
+        closed="true" resizable="true" modal="true" buttons="#dlg-buttons">
+        <form id="ff" method="post" novalidate="novalidate">
+            <fieldset>
+                <legend>菜单组信息填写栏</legend>
+                <table id="tblAdd">
+                    <tr>
+                        <td>
+                            <label for="GroupName">组名称：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="GroupName" name="GroupName" data-options="required:true,validType:'length[1,32]'" />
+                        </td>
+                        <td>
+                            <label for="GroupType">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;菜单组类型：</label></td>
+                        <td>
+                            <select id="GroupType" class="easyui-combobox" pannelHeight="100px" style="width: 154px;" name="GroupType" data-options="required:true">
+                                <option value="1" selected="selected">菜单组</option>
+                                <option value="0" >普通组</option>
+                                
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="SortCode">排序码：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="SortCode" name="SortCode" data-options="required:true" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Description">备注信息：</label></td>
+                        <td colspan="3">
+                            <textarea style="height: 50px; width: 406px;" id="Description" name="Description"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding-top: 10px">
+                            <a href="javascript:void(0)" class="easyui-linkbutton" id="btnAddPermissionGroup" iconcls="icon-ok">确定</a>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-cancel" onclick="javascript:$('#DivAddPermissionGroup').dialog('close')">关闭</a>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+        </form>
+    </div>
+
+    <!--------------------------修改菜单项信息的弹出层-------------------------->
+    <div id="DivUpdatePermissionGroup" class="easyui-dialog" style="width: 580px; height: 330px; padding: 10px 20px"
+        closed="true" resizable="true" modal="true" buttons="#dlg-buttons">
+        <form id="ffUpdate" method="post" novalidate="novalidate">
+            <fieldset>
+                <legend>菜单组信息填写栏</legend>
+                <table>
+                    <tr>
+                        <td>
+                            <input type="hidden" id="ID" name="ID" />
+                            <label for="GroupName">组名称：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="GroupName1" name="GroupName" data-options="required:true,validType:'length[1,32]'" />
+                        </td>
+                        <td>
+                            <label for="GroupType">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;菜单组类型：</label></td>
+                        <td>
+                            <select id="GroupType1" class="easyui-combobox" style="width: 154px;" name="GroupType" data-options="required:true">
+                                <option value="1" selected="selected">菜单组</option>
+                                <option value="0" >普通组</option>
+                                
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="SortCode">排序码：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="SortCode1" name="SortCode" data-options="required:true" />
+                        </td>
+                    </tr>
+                         <tr>
+                        <td>
+                            <label for="AllowDelete">允许删除：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="AllowDelete1" style="width: 154px;" name="AllowEdit" data-options="required:true">
+                                <option value="1">允许</option>
+                                <option value="0">不允许</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label for="AllowEdit1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;允许编辑：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="AllowEdit1" style="width: 154px;" name="AllowEdit" data-options="required:true">
+                                <option value="1">允许</option>
+                                <option value="0">不允许</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="IsVisible1">是否显示：</label></td>
+                        <td>
+                            <select id="IsVisible1" class="easyui-combobox" style="width: 154px;" name="IsVisible" data-options="required:true">
+                                <option value="1">显示</option>
+                                <option value="0">不显示</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label for="Enabled1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否有效：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="Enabled1" style="width: 154px;" name="Enabled" data-options="required:true">
+                                <option value="1">有效角色</option>
+                                <option value="0">无效角色</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Description">备注信息：</label></td>
+                        <td colspan="3">
+                            <textarea style="height: 50px; width: 406px;" id="Description1" name="Description"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding-top: 10px">
+                            <a href="javascript:void(0)" class="easyui-linkbutton" id="btnUpdatePermissionGroup" iconcls="icon-ok">确定</a>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-cancel" onclick="javascript:$('#DivUpdatePermissionGroup').dialog('close')">关闭</a>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+        </form>
+    </div>
+
+        <!--------------------------浏览菜单项信息的弹出层-------------------------->
+    <div id="DivBrowserPermissionGroup" class="easyui-dialog" style="width: 580px; height: 330px; padding: 10px 20px"
+        closed="true" resizable="true" modal="true" buttons="#dlg-buttons">
+        <form id="ffBrowse" method="post" novalidate="novalidate">
+            <fieldset>
+                <legend>菜单组信息填写栏</legend>
+                <table>
+                    <tr>
+                        <td>
+                            <label for="ID">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID:</label>
+                        </td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="ID2" name="ID"  disabled="disabled"  />
+                        </td>
+                        <td>
+                            <label for="GroupName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;组名称：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="GroupName2" name="GroupName"  disabled="disabled"  />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="GroupType">组类型：</label></td>
+                        <td>
+                            <select id="GroupType2" class="easyui-combobox" style="width: 154px;" name="GroupType"  disabled="disabled" >
+                                <option value="1" selected="selected">菜单组</option>
+                                <option value="0" >普通组</option>
+                                
+                            </select>
+                        </td>
+                        <td>
+                            <label for="SortCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排序码：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="SortCode2" name="SortCode"  disabled="disabled"  />
+                        </td>
+                    </tr>
+                         <tr>
+                        <td>
+                            <label for="AllowDelete">允许删除：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="AllowDelete2" style="width: 154px;" name="AllowEdit"  disabled="disabled" >
+                                <option value="1">允许</option>
+                                <option value="0">不允许</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label for="AllowEdit1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;允许编辑：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="AllowEdit2" style="width: 154px;" name="AllowEdit"  disabled="disabled" >
+                                <option value="1">允许</option>
+                                <option value="0">不允许</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="IsVisible">是否显示：</label></td>
+                        <td>
+                            <select id="IsVisible2" class="easyui-combobox" style="width: 154px;" name="IsVisible"  disabled="disabled" >
+                                <option value="1">显示</option>
+                                <option value="0">不显示</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label for="Enabled1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否有效：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="Enabled2" style="width: 154px;" name="Enabled"  disabled="disabled" >
+                                <option value="1">有效角色</option>
+                                <option value="0">无效角色</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="CreateBy2">创建人：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="CreateBy2" name="CreateBy" disabled="disabled" />
+                        </td>
+                        <td>
+                            <label for="CreateOn2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建日期：</label></td>
+                        <td>
+                            <input id="CreateOn2" style="width: 154px;" disabled="disabled" class="easyui-datebox" name="CreateOn" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="ModifiedBy2">最后修改人：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="ModifiedBy2" name="ModifiedBy" disabled="disabled" />
+                        </td>
+                        <td>
+                            <label for="ModifirdOn2">最后修改日期：</label></td>
+                        <td>
+                            <input id="ModifirdOn2" style="width: 154px;" disabled="disabled" class="easyui-datebox" name="ModifirdOn" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Description">备注信息：</label></td>
+                        <td colspan="3">
+                            <textarea style="height: 50px; width: 406px;" id="Description2" name="Description" disabled="disabled"></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+        </form>
+    </div>
+</body>
+</html>

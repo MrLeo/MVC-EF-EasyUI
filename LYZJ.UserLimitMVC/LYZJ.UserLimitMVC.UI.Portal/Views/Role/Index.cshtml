@@ -1,0 +1,600 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>实现角色的增删改查</title>
+    @*添加Jquery EasyUI的样式*@
+    <link href="@Url.Content("~/Content/JqueryEasyUI/themes/default/easyui.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/JqueryEasyUI/themes/icon.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" />
+
+    @*添加Jquery，EasyUI和easyUI的语言包的JS文件*@
+    <script src="@Url.Content("~/Content/JqueryEasyUI/jquery-1.8.0.min.js")"></script>
+    <script src="@Url.Content("~/Content/JqueryEasyUI/jquery.easyui.min.js")"></script>
+    <script src="@Url.Content("~/Content/JqueryEasyUI/locale/easyui-lang-zh_CN.js")"></script>
+   
+     @*日期格式的引用*@
+    <script src="@Url.Content("~/Content/datapattern.js")"></script>
+
+    @*实现对EasyUI的DataGird控件操作的JS代码*@
+    <script type="text/javascript">
+        $(function () {
+            //当页面首次刷新的时候执行的事件
+            initTable();
+
+            //角色信息的添加
+            AddRoleInfoBind();
+
+            //修改角色信息的代码
+            BindUpdateRoleInfo();
+
+            //绑定用户搜索按钮的点击事件
+            BindSerarchLickEvent();
+
+        });
+
+        //实现对角色DataGird控件的绑定操作
+        function initTable(queryData) {
+            $('#test').datagrid({   //定位到Table标签，Table标签的ID是test
+                //   UserInfo是控制器，GetAllUserInfos是控制器中获取用户数据的一个Action
+                url: '/Role/GetAllRoleInfos',   //指向后台的Action来获取当前用户的信息的Json格式的数据
+                title: '角色的设置',  //标识
+                //下面的这些属性如果谁不太清楚的话我建议去官方网站去学习或者在群里我们讨论，这里就不说了
+                iconCls: 'icon-save',
+                height: 368,
+                nowrap: true,
+                autoRowHeight: false,
+                striped: true,
+                collapsible: true,
+                pagination: true,
+                rownumbers: true,
+                //sortName: 'ID',    //根据某个字段给easyUI排序
+                sortOrder: 'asc',
+                remoteSort: false,
+                idField: 'ID',
+                queryParams: queryData,  //异步查询的参数
+                frozenColumns: [[
+	                { field: 'ck', checkbox: true },   //选择
+	                { title: '主键', field: 'ID', width: 40, sortable: true },  //主键
+                    { title: '角色名称', field: 'Realname', width: 100, sortable: true },  //登录名
+                    {
+                        title: '角色类型', field: 'CategoryCode', width: 100, sortable: true,
+                        formatter: function (value, row, index) {
+                            if (value == 0) {
+                                return "普通角色";
+                            }
+                            if (value == 1) {
+                                return "特殊角色";
+                            }
+                            if (value == 2) {
+                                return "VIP高级会员";
+                            }
+                            else {
+                                return "未知用户";
+                            }
+                        }
+                    },  //用户名
+                    { title: '排序码', field: 'SortCode', width: 100, sortable: true },
+                    { title: '创建人', field: 'CreateBy', width: 90, sortable: true },
+                    {
+                        title: '创建时间', field: 'CreateOn', width: 140, sortable: true,
+                        foematter: function () {
+                            eval('new ' + '/Date(1370066797982)/'.replace(/\//g, '')).toLocaleString()
+                        }
+                    },
+                    { title: '最后修改人', field: 'ModifiedBy', width: 90, sortable: true },
+                    { title: '修改时间', field: 'ModifiedOn', width: 140, sortable: true }
+                ]],
+                toolbar: [{
+                    id: 'btnadd',
+                    text: '添加',
+                    iconCls: 'icon-add',
+                    handler: function () {
+                        //实现弹出注册信息的页面
+                        ShowAddRoleDialog();
+                    }
+                }, '-', {
+                    id: 'btncut',
+                    text: '修改',
+                    iconCls: 'icon-cut',
+                    handler: function () {
+                        //实现修改的方法
+                        UpdateRoleInfo();
+                    }
+                }, '-', {
+                    id: 'btnIsNotCancle',
+                    text: '伪删除',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        //实现伪删删除的方法
+                        deleteBaseRoleInfo("not");
+                    }
+                }, '-', {
+                    id: 'btnCancle',
+                    text: '直接删除',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        //实现直接删除所有数据的方法
+                        deleteBaseRoleInfo();
+                    }
+                }, '-', {
+                    id: 'btnBrowse',
+                    text: '浏览',
+                    iconCls: 'icon-tip',
+                    handler: function () {
+                        //实现浏览的方法
+                        UpdateRoleInfo("browse");
+                    }
+                }, '-', {
+                    id: 'btnRecycle',
+                    text: '回收站',
+                    iconCls: 'icon-sum',
+                    handler: function () {
+                        //实现回收站的方法
+                        RecycleBinShow();
+                    }
+                }, '-', {
+                    id: 'btnRestore',
+                    text: '还原',
+                    iconCls: 'icon-back',
+                    handler: function () {
+                        //实现还原的方法
+                        deleteBaseRoleInfo("back");
+                    }
+                }, '-', {
+                    id: 'btnreload',
+                    text: '刷新',
+                    iconCls: 'icon-reload',
+                    handler: function () {
+                        $("#test").datagrid("reload");
+                    }
+                }]
+            });
+        }
+
+        //easyUI 弹出添加角色的对话框
+        function ShowAddRoleDialog() {
+            //弹出层
+            $("#DivAddRole").dialog('open').dialog('setTitle', '添加角色信息');
+        }
+
+        //实现角色的添加
+        function AddRoleInfoBind() {
+            $("#btnAddRole").click(function () {
+                //判断用户的信息是否通过验证
+                var validate = $("#ff").form('validate');
+                if (validate == false) {
+                    return false;
+                }
+                //获取需要传递的参数传递给前台
+                var postData = $("#ff").serializeArray();
+
+                //发送异步请求到后台保存用户数据
+                $.post("/Role/AddRole", postData, function (data) {
+                    if (data = "OK") {
+                        //添加成功  1.关闭弹出层，2.刷新DataGird
+                        alert("添加角色成功");
+                        $("#DivAddRole").dialog("close");
+                        $("#test").datagrid("reload");
+                        $("#ff").form("clear");
+                    }
+                    else {
+                        alert("添加角色失败，请您检查");
+                    }
+                });
+            });
+        }
+
+        //实现直接删除数据和伪删除数据的方法
+        function deleteBaseRoleInfo(not) {
+            //得到用户选择的数据的ID
+            var rows = $("#test").datagrid("getSelections");
+            //首先判断用户是否已经选择了需要删除的数据,然后循环将用户选择的数据传递到后台
+            if (rows.length >= 1) {
+                //遍历出用户选择的数据的信息，这就是用户用户选择删除的用户ID的信息
+                var ids = "";   //1,2,3,4,5
+                for (var i = 0; i < rows.length; i++) {
+                    //异步将删除的ID发送到后台，后台删除之后，返回前台，前台刷洗表格
+                    ids += rows[i].ID + ",";
+                }
+                //最后去掉最后的那一个,
+                ids = ids.substring(0, ids.length - 1);
+                //获取用户选择的用户信息，如果用户选择了已经登录的用户的话需要给出不能删除的信息
+                var roleNames = "";
+                for (var i = 0; i < rows.length; i++) {
+                    roleNames += rows[i].Realname + ",";
+                }
+                roleNames = roleNames.substring(0, roleNames.length - 1);
+                //首先取出来到底是直接删除还是伪删除发送异步请求的地址和是否是伪删除的参数
+                var postData = "";
+                if (not == null) {
+                    postData = {
+                        ID: ids
+                    }
+                }
+                else {
+                    postData = {
+                        ID: ids, Not: not
+                    }
+                }
+                //然后确认发送异步请求的信息到后台删除数据
+                $.messager.confirm("删除信息", "您确认删除<font color='red' size='3'>" + roleNames + "</font>角色吗？", function (DeleteRole) {
+                    if (DeleteRole) {
+                        $.get("/Role/DeleteRole", postData, function (data) {
+                            if (data == "OK") {
+                                //友情提示用户删除成功，刷新表格
+                                $.messager.alert("友情提示", "删除/还原成功");
+                                $("#test").datagrid("reload");
+                                //当删除完成之后，第二次删除的时候还记得上次的信息，这样是不可以的，所以我们需要清除第一次的信息
+                                //第一种方法
+                                rows.length = "";
+                                //第二种方法
+                                $("#test").datagrid("clearSelections");
+                            }
+                            else {
+                                $.messager.alert("友情提示", data);
+                            }
+                        });
+                    }
+                });
+            }
+            else {
+                alert("请选择你要删除的数据");
+            }
+        }
+
+        //修改用户的信息
+        function UpdateRoleInfo(browse) {
+            //首先取出来用户选择的数据的ID
+            var rows = $("#test").datagrid("getSelections");
+            //首先取出来值判断用户只能选择一个
+            if (rows.length != 1) {
+                $.messager.alert("友情提示", "每次只能修改/浏览一条，你已经选择了<font color='red'  size='6'>" + rows.length + "</font>条", "error");
+                return;
+            }
+            if (browse == null) {
+                //处理修改的信息，弹出修改的对话框,然后显示选择的用户的详细信息
+                $("#DivUpdateRole").dialog('open').dialog('setTitle', '修改角色信息');
+                //绑定修改显示详细信息的方法
+                BindShowUpdateRoleInfo();
+            }
+            else {
+                //处理浏览的信息，弹出浏览狂，然后显示浏览信息的相信信息
+                $("#DivBrowerRole").dialog('open').dialog('setTitle', '角色浏览');
+                //绑定用户的浏览信息
+                BindBrowerRoleInfo();
+            }
+        }
+
+        //绑定修改显示详细信息的方法
+        function BindShowUpdateRoleInfo() {
+            //首先用户发送一个异步请求去后台实现方法
+            var ID = $("#test").datagrid("getSelections")[0].ID;  //获取到了用用户选择的ID
+            $.get("/Role/GetRoleInfos", { ID: ID }, function (roleInfo) {
+                $("#ID").val(roleInfo.ID);
+                $("#Realname1").val(roleInfo.Realname);
+                $("#CategoryCode1").combobox('setValue', roleInfo.CategoryCode);
+                $("#SortCode1").val(roleInfo.SortCode);
+                $("#AllowEdit1").combobox('setValue', roleInfo.AllowEdit);
+                $("#IsVisible1").combobox('setValue', roleInfo.IsVisible);
+                $("#Enabled1").combobox('setValue', roleInfo.Enabled);
+                $("#Description1").val(roleInfo.Description);
+            });
+        }
+
+        //修改用户的相信信息
+        function BindUpdateRoleInfo() {
+            $("#btnUpdate").click(function () {
+                //首先也是对用户进行检测
+                var validate = $("#ffUpdate").form("validate");
+                if (validate == false) {
+                    return false;
+                }
+                //构造参数发送给后台
+                var posData = $("#ffUpdate").serializeArray();
+                $.get("/Role/UpdateRoleInfo", posData, function (date) {
+                    if (date == "OK") {
+                        //修改成功，关闭弹出层，刷新DataGird
+                        alert("修改成功");
+                        $("#DivUpdateRole").dialog('close');
+                        $("#test").datagrid("reload");
+                    }
+                    else {
+                        $.messager.alert("友情提示", "修改失败，请您检查");
+                    }
+                })
+            });
+        }
+
+        //绑定浏览详细信息的方法
+        function BindBrowerRoleInfo() {
+            var ID = $("#test").datagrid('getSelections')[0].ID;
+            //发送请求
+            $.get("/Role/GetRoleInfos", { ID: ID }, function (roleInfo) {
+                $("#ID2").val(roleInfo.ID);
+                $("#DeletionStateCode2").combobox('setValue', roleInfo.DeletionStateCode);
+                $("#Realname2").val(roleInfo.Realname);
+                $("#CategoryCode2").combobox('setValue', roleInfo.CategoryCode);
+                $("#SortCode2").val(roleInfo.SortCode);
+                $("#AllowEdit2").combobox('setValue', roleInfo.AllowEdit);
+                $("#IsVisible2").combobox('setValue', roleInfo.IsVisible);
+                $("#Enabled2").combobox('setValue', roleInfo.Enabled);
+                $("#Description2").val(roleInfo.Description);
+                $("#CreateBy2").val(roleInfo.CreateBy);
+                $("#ModifiedBy2").val(roleInfo.ModifiedBy);
+                $("#CreateOn2").datebox('setValue', (eval(roleInfo.CreateOn.replace(/\/Date\((\d+)\)\//gi, "new Date($1)")).pattern("yyyy-M-d h:m:s")));
+                $("#ModifirdOn2").datebox('setValue', (eval(roleInfo.ModifirdOn.replace(/\/Date\((\d+)\)\//gi, "new Date($1)")).pattern("yyyy-M-d h:m:s")));
+            })
+        }
+
+        //绑定搜索按钮的的点击事件
+        function BindSerarchLickEvent() {
+            //按条件进行查询数据，首先我们得到数据的值
+            $("#btnSerach").click(function () {
+                //得到用户输入的参数
+                var queryData = {
+                    RealName: $("#txtRealName").val(),
+                    Enabled: $("#txtEnabled").combobox('getValue'),
+                    CategoryCode: $("#txtCategoryCode").combobox('getValue')
+                }
+                //将值传递给
+                initTable(queryData);
+                return false;
+            });
+        }
+
+        //实现回收站的功能
+        function RecycleBinShow() {
+            var query = { DeletionStateCode: 1 };
+            initTable(query);
+        }
+    </script>
+</head>
+<body>
+    <!-----------------------EasyUI的DataGird控件的放置----------------------->
+    <div>
+        <!-------------------------------搜索框----------------------------------->
+        <fieldset>
+            <legend>角色详细信息模糊搜索</legend>
+        <div>
+            <label for="txtRealName">角色名称：</label>
+            <input type="text" ID="txtRealName" name="txtRealName" />&nbsp;&nbsp;&nbsp;&nbsp;
+            <label for="txtEnabled">是否有效：</label>
+            <select class="easyui-combobox" id="txtEnabled" style="width:90px;" name="txtEnabled">
+                <option value="-1">请选择</option>
+                <option value="1">有效</option>
+                <option value="0">无效</option>
+            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+            <label for="txtCategoryCode">角色类型：</label>
+            <select id="txtCategoryCode" class="easyui-combobox" style="width:90px;" name="txtCategoryCode">
+                <option value="-1">请选择</option>
+                <option value="0">普通角色</option>
+                <option value="1">特殊角色</option>
+                <option value="2">VIP高级会员</option>
+            </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <a href="#" class="easyui-linkbutton" iconcls="icon-search" id="btnSerach">模糊搜索</a>
+        </div>
+        </fieldset>
+
+        <!-------------------------------用户详细信息----------------------------------->
+        <table id="test" style="width: 940px" title="用户操作" iconcls="icon-edit">
+            
+        </table>
+    </div>
+
+    <!--------------------------添加用户信息的弹出层---------------------------->
+    <div id="DivAddRole" class="easyui-dialog" style="width:580px;height:285px;padding:10px 20px"
+			closed="true" resizable="true" modal="true" buttons="#dlg-buttons">
+        <form id="ff" method="post" novalidate="novalidate">
+            <fieldset>
+                <legend>角色信息填写栏</legend>
+                <table id="tblAdd">
+                    <tr>
+                        <td><label for="UserName">角色名称：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="Realname" name="Realname" data-options="required:true,validType:'length[1,32]'" />
+                        </td>           
+                        <td><label for="CategoryCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色分类：</label></td>
+                        <td>
+                            <select id="CategoryCode" class="easyui-combobox" style="width:154px;" name="CategoryCode" data-options="required:true">
+                                <option value="0">普通角色</option>
+                                <option value="1">特殊角色</option>
+                                <option value="2">VIP高级会员</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="SortCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排序码：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="SortCode" name="SortCode" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="Description">备注信息：</label></td>
+                        <td colspan="3">
+                            <textarea  style="height:50px; width:406px;" id="Description" name="Description" ></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding-top:10px">
+                            <a href="javascript:void(0)" class="easyui-linkbutton" id="btnAddRole" iconcls="icon-ok" >确定</a>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-cancel" onclick="javascript:$('#DivAddRole').dialog('close')">关闭</a>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+        </form>
+    </div>
+
+    <!------------------------弹出修改角色信息的弹出层---------------------------------->
+    <div id="DivUpdateRole" class="easyui-dialog" style="width:580px;height:300px;padding:10px 20px"
+			closed="true" resizable="true" modal="true" buttons="#dlg-buttons">
+        <form id="ffUpdate" method="post" novalidate="novalidate">
+            <fieldset>
+                <legend>角色信息的修改</legend>
+                <table id="tblUpdate">
+                    <tr>
+                        <input type="hidden" id="ID" name="ID" />
+                        <td><label for="Realname1">角色名称：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="Realname1" name="Realname" data-options="required:true,validType:'length[1,32]'" />
+                        </td>           
+                        <td><label for="CategoryCode1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色分类：</label></td>
+                        <td>
+                            <select id="CategoryCode1" class="easyui-combobox" style="width:154px;" name="CategoryCode" data-options="required:true">
+                                <option value="0">普通角色</option>
+                                <option value="1">特殊角色</option>
+                                <option value="2">VIP高级会员</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="SortCode1">排序码：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="SortCode1" name="SortCode" />
+                        </td>
+                         <td><label for="AllowEdit1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;允许编辑：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="AllowEdit1" style="width:154px;" name="AllowEdit"  data-options="required:true">
+                                <option value="1">允许</option>
+                                <option value="0">不允许</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="IsVisible1">是否显示：</label></td>
+                        <td>
+                            <select id="IsVisible1" class="easyui-combobox" style="width:154px;" name="IsVisible" data-options="required:true">
+                                <option value="1">显示</option>
+                                <option value="0">不显示</option>
+                            </select>
+                        </td>
+                         <td><label for="Enabled1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否有效：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="Enabled1" style="width:154px;" name="Enabled"  data-options="required:true">
+                                <option value="1">有效角色</option>
+                                <option value="0">无效角色</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="Description1">备注信息：</label></td>
+                        <td colspan="3">
+                            <textarea  style="height:50px; width:406px;" id="Description1" name="Description" ></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding-top:10px">
+                            <a href="javascript:void(0)" class="easyui-linkbutton" id="btnUpdate" iconcls="icon-ok" >确定</a>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-cancel" onclick="javascript:$('#DivUpdateRole').dialog('close')">关闭</a>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+        </form>
+    </div>
+    
+    <!------------------------弹出浏览角色信息的弹出层---------------------------------->
+    <div id="DivBrowerRole" class="easyui-dialog" style="width:580px;height:350px;padding:10px 20px"
+			closed="true" resizable="true" modal="true" buttons="#dlg-buttons">
+        <form id="ffBrower" method="post" novalidate="novalidate">
+            <fieldset>
+                <legend>角色浏览信息</legend>
+                <table id="tblBrower">
+                    <tr>
+                        <td><label for="ID2">用户ID：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="ID2" name="ID" disabled="disabled"/>
+                        </td> 
+                        <td><label for="DeletionStateCode2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;删除状态：</label></td>
+                        <td>
+                            <select id="DeletionStateCode2" class="easyui-combobox" style="width:154px;" disabled="disabled" name="DeletionStateCode">
+                                <option value="0">正常</option>
+                                <option value="1">伪删除</option>
+                            </select>
+                        </td>  
+                    </tr>
+                       <tr>
+                        <td><label for="Realname2">角色名称：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="Realname2" name="Realname"  disabled="disabled" />
+                        </td>           
+                        <td><label for="CategoryCode2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色分类：</label></td>
+                        <td>
+                            <select id="CategoryCode2" class="easyui-combobox" style="width:154px;"  disabled="disabled" name="CategoryCode">
+                                <option value="0">普通角色</option>
+                                <option value="1">特殊角色</option>
+                                <option value="2">VIP高级会员</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="SortCode2">排序码：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="SortCode2"  disabled="disabled" name="SortCode" />
+                        </td>
+                         <td><label for="AllowEdit2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;允许编辑：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="AllowEdit2" style="width:154px;"  disabled="disabled" name="AllowEdit" >
+                                <option value="1">允许</option>
+                                <option value="0">不允许</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="IsVisible2">是否显示：</label></td>
+                        <td>
+                            <select id="IsVisible2" class="easyui-combobox" style="width:154px;"  disabled="disabled" name="IsVisible">
+                                <option value="1">显示</option>
+                                <option value="0">不显示</option>
+                            </select>
+                        </td>
+                         <td><label for="Enabled2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否有效：</label></td>
+                        <td>
+                            <select class="easyui-combobox" id="Enabled2" style="width:154px;" name="Enabled"  disabled="disabled">
+                                <option value="1">有效角色</option>
+                                <option value="0">无效角色</option>
+                            </select>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td><label for="CreateBy2">创建人：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="CreateBy2" name="CreateBy" disabled="disabled" />
+                        </td>
+                        <td><label for="CreateOn2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建日期：</label></td>
+                        <td>
+                            <input id="CreateOn2" style="width:154px;" disabled="disabled" class="easyui-datebox" required="required" name="CreateOn" />
+                        </td> 
+                    </tr>
+                     <tr>
+                        <td><label for="ModifiedBy2">最后修改人：</label></td>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="ModifiedBy2" name="ModifiedBy" disabled="disabled"/>
+                        </td>   
+                        <td><label for="ModifirdOn2">最后修改日期：</label></td>
+                        <td>
+                            <input id="ModifirdOn2" style="width:154px;" disabled="disabled" class="easyui-datebox" name="ModifirdOn" />
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td><label for="Description">备注信息：</label></td>
+                        <td colspan="3">
+                            <textarea  style="height:50px; width:406px;" id="Description2" disabled="disabled" name="Description" ></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+        </form>
+    </div>
+</body>
+</html>

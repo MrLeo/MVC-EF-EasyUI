@@ -1,0 +1,65 @@
+﻿@using LYZJ.UserLimitMVC.Model
+@model LYZJ.UserLimitMVC.Model.BaseUser
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>设置角色</title>
+    <!--添加发送异步请求到后台的引用，MVC实现-->
+    <script src="@Url.Content("~/Content/JqueryEasyUI/jquery-1.8.0.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")"></script>
+    <script type="text/javascript">
+        function afterSetRole() {
+            //调用父容器的一个方法，关闭对话框
+            window.parent.afterSetRole();
+        }
+    </script>
+</head>
+<body>
+    <div> 
+        <fieldset>
+            <legend>给用户:<font size="5px" color="blue">@Model.UserName </font>设置角色</legend>
+            @{
+                using(Ajax.BeginForm("SetRole","UserInfo",new AjaxOptions {OnSuccess="afterSetRole"},new {id="frmSetRole"}))
+                {
+                    //隐藏域，用来给后台传递用户的ID
+                    <input type="hidden" name="HideUserID" value="@Model.ID" />
+                    var allRoles=(List<LYZJ.UserLimitMVC.Model.BaseRole>)ViewBag.AllRoles;
+                    //那到前台传递过来的是否选中的数据
+                    var extIsRoleIds=( List<int>)ViewBag.ExtIsRoleIDS;
+                
+                    for (int i = 0; i < allRoles.Count; i++)
+                    {
+                         //拼接出来选中的ID传递到后台去
+                        if(i==3)
+                        {
+                            <br /><br />
+                        }
+                        string roleStr = "sru_" + allRoles[i].ID;
+                        <!-- 判断当前角色有没有加入到当前用户里面去，如果加进去默认是选中，否则默认没选中 -->
+                        if(extIsRoleIds.Contains(allRoles[i].ID))
+                        {
+                            <input type="checkbox" checked="checked" value="@roleStr" name="@roleStr" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="@roleStr" value="@roleStr" />
+                        }
+                        <label for="@roleStr">@allRoles[i].Realname</label><span>&nbsp;&nbsp;</span>
+                    }
+                    <br /><br />
+                    <div style="text-align:center;">
+                        <input type="submit" value="设置角色" />
+                    </div>               
+                }
+            }
+        </fieldset>
+          
+    </div>
+</body>
+</html>

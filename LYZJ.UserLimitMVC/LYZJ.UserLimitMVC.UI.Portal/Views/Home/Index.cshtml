@@ -1,0 +1,147 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Kencery(韩迎龙)&& 权限设计初始页</title>
+     @*添加Jquery EasyUI的样式*@
+    <link href="~/Content/JqueryEasyUI/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/JqueryEasyUI/themes/icon.css" rel="stylesheet" />
+    <style>
+        #top {
+            text-shadow:3px 3px 3px red,6px 6px 6px black,10px 10px 10px Blue;
+            text-align:center;
+        }
+    </style>
+    @*添加Jquery，EasyUI和easyUI的语言包的JS文件*@
+    <script src="~/Content/JqueryEasyUI/jquery-1.8.0.min.js"></script>
+    <script src="~/Content/JqueryEasyUI/jquery.easyui.min.js"></script>
+    <script src="~/Content/JqueryEasyUI/locale/easyui-lang-zh_CN.js"></script>
+    @*执行JavaScript的脚本*@
+    <script>    
+        $(function () {
+            //读取动态变化的时间
+            ReadDateTimeShow();
+            //绑定菜单按钮的点击事件
+            BindMenuClickEvent(); 
+
+            //这里实现对时间动态的变化
+            var setTimeInterval = setInterval(ReadDateTimeShow, 1000);
+
+            //Tab页签的实现
+            $("#worktab").tabs({});
+        });
+
+        //绑定菜单按钮的点击事件  MenuLink
+        function BindMenuClickEvent() {
+            $(".MenuLink").click(function () {
+                //获取按钮里面的src属性
+                var src = $(this).attr("src");
+                //将主框架的iframe跳转到菜单指向的地址
+                //$("#frmWorkArea").attr("src", src);
+
+                //得到节点的名字来放去Title
+                var title = $(this).text();
+                //拼接一个Iframe标签
+                var str = '<iframe id="frmWorkArea" width="100%" height="100%" frameborder="0" scrolling="yes" src="' + $(this).attr("src") + '"></iframe>'
+
+                //首先判断用户是否已经单击了此项，如果单击了直接获取焦点，负责打开
+                var isExist = $("#worktab").tabs('exists', title);
+                if (!isExist) {
+                    //添加tab的节点，调用easyUITab标签的方法
+                    $("#worktab").tabs('add', {
+                        title: title,
+                        content: str,
+                        iconCls: 'icon-save',
+                        closable: true
+                    });
+                }
+                else {
+                    //如果存在则获取焦点
+                    $("#worktab").tabs('select', title);
+                }
+            });
+        }
+
+        //读取动态变化的时间
+        function ReadDateTimeShow() {
+            var year = new Date().getFullYear();
+            var month = new Date().getMonth() + 1;
+            var day = new Date().getDate();
+            var time = new Date().toLocaleTimeString();
+            var addDate = year + "年" + month + "月" + day + "日,时间:" + time;
+            $("#date").text(addDate);
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+
+    @*--------------------------------------网站头部开始（TOP）--------------------------------------*@
+    <div data-options="region:'north',split:true" title="MVC权限系统(Top)" style="height: 90px;">
+        <div class="easyui-layout" data-options="fit:true" style="background: #ccc;">
+            <div id="top" data-options="region:'center'" style="text-align: center;">
+                <h1>陇原之家后台权限管理系统1.0——Kencery（韩迎龙） @@ MVC权限系统 </h1>
+            </div>
+            <div data-options="region:'east',split:true" style="width: 500px;">
+                <marquee>欢迎管理员<font color="red" size="5">@ViewBag.UserName</font>登录陇原之家后台管理</marquee>
+                <div style="float: right; padding-right: 30px; font-size: 14px; padding-top: 6px;">
+                    当前时间：<b id="date"></b>  &nbsp;&nbsp <a href="/Login/Index"><b>注销</b></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*--------------------------------------网站头部结束（TOP）--------------------------------------*@
+
+    @*--------------------------------------网站菜单栏开始（Left）--------------------------------------*@
+    <div data-options="region:'west',split:true" title="菜单导航" style="width: 150px; padding: 1px; overflow: hidden;">
+        <div class="easyui-accordion" data-options="fit:true,border:false">
+            <div title="后台权限管理" iconcls="icon-edit" data-options="selected:true" style="padding: 10px; overflow: auto;">
+                @*------存放菜单项-------*@
+                <p><a href="javascript:void(0)" src="/UserInfo/Index" class="MenuLink">用户管理</a></p>
+                <p><a href="javascript:void(0)" src="/Role/Index" class="MenuLink">角色管理</a></p>
+                <p><a href="javascript:void(0)" src="/Permission/Index" class="MenuLink">权限管理</a></p>
+                <p><a href="javascript:void(0)" src="/Group/Index" class="MenuLink">权限组管理</a></p>
+            </div>
+            <div title="网站基本管理" iconcls="icon-edit" style="padding: 10px;">
+                <p><a href="javascript:void(0)">新闻管理</a></p>
+                <p><a href="javascript:void(0)">图片管理</a></p>
+                <p><a href="javascript:void(0)">上传管理</a></p>
+            </div>
+            <div title="网站开发支持" iconcls="icon-edit" style="padding: 10px">
+                content3
+            </div>
+        </div>
+    </div>
+    @*--------------------------------------网站结束（Left）--------------------------------------*@
+
+    @*--------------------------------------网站中间部分开始（Center） 面包屑--------------------------------------*@
+    <div data-options="region:'center'" style="overflow: hidden;">
+        <div id="worktab" fit="true">
+		    <div title="权限网站公告" data-options="cache:false">
+			    <iframe id="frmWorkArea" width="100%" height="100%" frameborder="0" scrolling="yes" src="~/Welcome.html"></iframe>
+		    </div>
+        </div>
+    </div>
+    @*--------------------------------------网站中间部分结束（Center）--------------------------------------*@
+
+    @*--------------------------------------网站右边菜单开始（Right）--------------------------------------*@
+    <div data-options="region:'east',iconCls:'icon-reload',split:true" title="日历信息" style="width: 235px;">
+        <div class="easyui-calendar" style="width: 230px; height: 230px;"></div>
+        <div style="width: 230px">苦心人，天不负，卧薪尝胆，百二秦关今属楚</div>
+    </div>
+    @*--------------------------------------网站右边菜单结束（Right）--------------------------------------*@
+
+    @*--------------------------------------网站头部开始（Foot）--------------------------------------*@
+    <div data-options="region:'south',split:true" title="MVC权限系统(Foot)" style="height: 60px; background: #efefef;">
+        <div class="easyui-layout" data-options="fit:true" style="background: #ccc;">
+            <div data-options="region:'center'" style="text-align: center; padding: 10px;">版权所有： @@Kencery(韩迎龙) &&2013-2030 </div>
+        </div>
+    </div>
+    @*--------------------------------------网站头部结束（Foot）--------------------------------------*@
+
+</body>
+</html>

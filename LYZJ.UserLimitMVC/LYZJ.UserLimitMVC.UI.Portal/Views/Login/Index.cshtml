@@ -1,0 +1,134 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Kencery 权限管理系统</title>
+        <link href="~/Content/images/Default.css" rel="stylesheet" />
+        <link href="~/Content/images/User_Login.css" rel="stylesheet" />
+        <link href="~/Content/images/xtree.css" rel="stylesheet" />
+        @*引用Jquery文件的JS脚本*@
+        <script src="~/Scripts/jquery-1.7.1.js"></script>
+        <script type="text/javascript">
+            //判断显示用户登录的时候显示整个页面
+            if (window.parent.window != window) {
+                window.top.location.href = "/Home/Index";
+            }
+
+            //当用户刷新页面触发的方法
+            $(function() {
+                //实现用户登录的方法
+                LoginUserInfo();
+                //单击的时候修改验证码的方法
+                //ClickRemoveChangeCode();
+            });
+
+            //实现用户登录
+            function LoginUserInfo() {
+                //获取单击用户登录按钮的事件
+                $("#btnLogin").click(function() {
+                    //首先获取到要传递到控制器的参数，并且狗造成Json。UserName，UserPassword，Code
+                    var postData = {
+                        UserName: $("#UserName").val(),
+                        UserPassword: $("#UserPassword").val(),
+                        Code: $("#Code").val()
+                    };
+                    //发送异步请求实现登录  post
+                    //$.post("/Login/CheckUserInfo", postData, function(data) {
+                    //    if (data == "OK") {
+                    //        window.location.href = "/Home/Index";
+
+                    //    } else {
+                    //        alert(data);
+                    //        window.location.href = "/Login/Index";
+                    //    }
+                    //});
+                    //发送异步请求实现登录 ajax
+                    $.ajax({
+                        url: '/Login/CheckUserInfo',
+                        data: postData,
+                        cache:false,
+                        async: true,
+                        type: 'post',
+                        success: function (data) {
+                            if (data == "OK") {
+                                window.location.href = "/Home/Index";
+
+                            } else {
+                                alert(data);
+                                window.location.href = "/Login/Index";
+                            }
+                        }
+                    });
+                });
+            }
+
+            //单击重新改变验证码
+            function ClickRemoveChangeCode() {
+                //首先我们获取到验证码的路径
+                var code = $("#imgCode").attr("src");
+                //然后重新给验证码的路径赋值
+                $("#imgCode").attr("src", code + "1");
+            }
+        </script>
+    </head>
+    <body id="userlogin_body">
+        <div id="user_login">
+            <dl>
+                <dd id="user_top">
+                <ul>
+                    <li class="user_top_l"></li>
+                    <li class="user_top_c"></li>
+                    <li class="user_top_r"></li>
+                </ul>
+                <dd id="user_main">
+                <ul>
+                    <li class="user_main_l"></li>
+                    <li class="user_main_c">
+                        <div class="user_main_box">
+                            <ul>
+                                <li class="user_main_text">用户名： </li>
+                                <li class="user_main_input">
+                                    <input type="text" class="TxtUserNameCssClass" id="UserName" name="UserName" value="hyl"> 
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="user_main_text">密  码： </li>
+                                <li class="user_main_input">
+                                    <input type="password" class="TxtPasswordCssClass" id="UserPassword" name="UserPassword" value="hyl"> 
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="user_main_text">验证码： </li>
+                                <li class="user_main_input">
+                                    <input type="text" class="TxtPasswordCssClass" id="Code" name="Code" value="11111"> 
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="user_main_text">验证码： </li>
+                                <li class="user_main_input">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="/Login/CheckCode?ID=1" id="imgCode" alt="单击可刷新" onclick="ClickRemoveChangeCode()"  /> 
+                                    &nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="ClickRemoveChangeCode();return false;">看不清,换一张</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="user_main_r">
+                        <input type="image" class="IbtnEnterCssClass" id="btnLogin" name="btnLogin" src="~/Content/images/user_botton.gif">
+                    </li>
+                </ul>
+                <dd id="user_bottom">
+                    <ul>
+                        <li class="user_bottom_l"></li>
+                        <li class="user_bottom_c"><SPAN style="MARGIN-TOP: 40px">by 韩迎龙-Kencery(QQ群：159227188)：权限管理</SPAN> </li>
+                        <li class="user_bottom_r"></li></ul>
+                </dd>
+            </dl> 
+        </div>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ include file="EF.Utility.CS.ttinclude"#>  //引进TT模板的命名空间
+<#@ output extension=".cs" #>
+<# CodeGenerationTools code = new CodeGenerationTools(this);
+MetadataLoader loader = new MetadataLoader(this);
+CodeRegion region = new CodeRegion(this, 1);
+MetadataTools ef = new MetadataTools(this);
+
+string inputFile = @"..\\LYZJ.UserLimitMVC.Model\\DataModel.edmx";
+
+EdmItemCollection ItemCollection = loader.CreateEdmItemCollection(inputFile);
+string namespaceName = code.VsNamespaceSuggestion();
+
+EntityFrameworkTemplateFileManager fileManager = EntityFrameworkTemplateFileManager.Create(this);
+#>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using LYZJ.UserLimitMVC.IDAL;
+
+namespace LYZJ.UserLimitMVC.DAL
+{
+    //一次跟数据库交互的会话
+    public partial class DbSession : IDbSession //代表应用程序跟数据库之间的一次会话，也是数据库访问层的统一入口
+    {
+
+
+	//在这里需要一个for循环来遍历数据库中所有的表放置在下面即可，这样就实现了所有的表对应的仓储显示出来了。
+<#
+	//使用foreach循环遍历ItemCollection.GetItems<EntityType>集合
+	foreach(EntityType entity in ItemCollection.GetItems<EntityType>().OrderBy(e=>e.Name))
+	{ #>
+	        public IDAL.I<#=entity.Name#>Repository <#=entity.Name#>Repository
+        {
+            get { return new <#=entity.Name#>Repository(); }
+        }
+	<#}#>
+	}
+}

@@ -1,0 +1,121 @@
+﻿
+此存放的是网站访问过程中遇到的一些问题的记录以及是否解决
+
+1.在用户表里面有两个字段是否审核，是否有效，只有当这两个值是已审核或者1的时候才允许用户登录             已解决
+	解决方法:修改判断条件：var LoginUserInfoCheck = _DbSession.BaseUserRepository.LoadEntities(u => u.UserName ==
+	  userInfo.UserName && u.AuditStatus == "已审核" && u.Enabled == 1).FirstOrDefault();
+2.在用户表里面有一个是否显示的字段，只有当这个字段选中的是显示的时候用户才能在easyUI上面显示            已解决
+	解决方法:修改判断条件：var data = _userInfoService.LoadPageEntities(pageIndex, pageSize,
+	 out total, u => true && u.IsVisible == 1, true, u => u.ID);
+3. EF中提示一个或者多个验证出现错误，查看 EntityValidationErrors 详细信息的解决方法出现错误             已解决
+	解决方法:检查你的数据库字段的信息
+4.在添加用户的时候我的某些字段默认就是int?，但是我是用枚举来表示的，这样就会出现错误                    已解决
+	解决方法:userInfo.IsStaff = (Int32?)StaffEnum.OK; 
+5.更新条目时出错。 将截断字符串或二进制数据。                                                           已解决
+	解决方法:检查数据库字段的长度是否不够
+6.用户注册的时候登录系统的名称必须不相同，如果相同的话会出现登录不到系统内部去                          已解决
+	解决方法:$("#UserName").blur(function () {
+                //得到验证控件的值
+                var UserNameCheck = $("#UserName").val();
+                //发送异步请求去验证用户名不能重复
+                $.get("/UserInfo/CheckUserName", { UserName: UserNameCheck }, function (date) {
+                    if (date == "OK") {
+                        alert("该用户已经存在");
+                        $("#UserName").val("");
+                        return;
+                    }
+                });
+            });
+			 var checkUserName = _userInfoService.CheckUserNameTest(UserName);执行的Linq语句
+7.当用户添加完数据之后然后会回到显示页面，再次单击添加的时候上次的信息还记录在所有的控件中             已解决
+	解决方法:对所有的空间进行清空
+8.对所有的空间进行验证，比如必须输入的是Email,不能为空，长度等的限制                                   已解决
+	解决方法:
+	<input class="easyui-validatebox" type="text" id="Email" name="Email"  data-options="validType:'email'"/>
+9.验证两次输入的密码必修相同，负责不能通过验证                                                         已解决
+	解决方法:自己写一个Js方法来判断用户输入的是否正确
+	    function checkPwdAndOKPwdIsEqualTo() {
+            $.extend($.fn.validatebox.defaults.rules, {
+                //判断必须和某个字段相同
+                equalTo: {
+                    validator: function (value, param) {
+                        return $('#' + param[0]).val() == value;
+                    },
+                    message: '字段不匹配'
+                }
+            });
+        }
+	 <input class="easyui-validatebox" type="text" id="OKUserPassword" name="OKUserPassword" data-options="required:true"
+	      validType="equalTo['UserPassword']" invalidMessage="两次输入的密码不匹配" />
+10.录取手机号码等数字的时候只能要求文本框中输入数字，所以在easyUI中怎么解决                             已解决
+	解决方法:<input class="easyui-numberbox" type="text" id="QICQ" name="QICQ" />
+11.将页面中所有的引用(公用的引用JS和CSS)等都拿到模版中去引用，这样可以减少JS多个文件的下载              已解决
+	解决方法:暂时发现提取不出去，只好改了引用的方式
+	    @*添加Jquery EasyUI的样式*@
+		<link href="@Url.Content("~/Content/JqueryEasyUI/themes/default/easyui.css")" rel="stylesheet" />
+		<link href="@Url.Content("~/Content/JqueryEasyUI/themes/icon.css")" rel="stylesheet" />
+		<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" />
+
+		@*添加Jquery，EasyUI和easyUI的语言包的JS文件*@
+		<script src="@Url.Content("~/Content/JqueryEasyUI/jquery-1.8.0.min.js")"></script>
+		<script src="@Url.Content("~/Content/JqueryEasyUI/jquery.easyui.min.js")"></script>
+		<script src="@Url.Content("~/Content/JqueryEasyUI/locale/easyui-lang-zh_CN.js")"></script>
+   
+		 @*日期格式的引用*@
+		<script src="@Url.Content("~/Content/datapattern.js")"></script>
+12.用户信息的直接删除和伪删除，伪删除的用户不因该显示在easyUI的DataGird中                               已解决
+	解决方法:
+	//调用分页的方法，传递参数,拿到分页之后的数据
+     var data = _userInfoService.LoadPageEntities(pageIndex, pageSize, out total, 
+		u => true && u.DeletionStateCode == 0, true, u => u.SortCode);
+13.当用户修改信息的时候如何判断用户是否相同，这里想方设法实现代码重用                                   已解决
+	解决方法:想办法解决，但是最终还是直接写了出来
+	  $("#UserName1").blur(function () {
+                var UserNameCheck = $("#UserName1").val();
+                $.get("/UserInfo/CheckUserName", { UserName: UserNameCheck }, function (date) {
+                    if (date == "OK") {
+                        alert("该用户已经存在");
+                        $("#UserName1").val("");
+                        return;
+                    }
+                })
+            });
+14.现在不确定DataGird用户是否显示在里面，也就是除了删除的其他的是否应该显示在EasyUI的DataGird           未解决
+	解决方法:
+15.用户登录的时候保存的Session不对，需要再次的进行检查，根据用户名查出所有的用户信息然后保存成session   已解决
+	解决方法:
+		//如果用户信息存在的话讲用户信息保存到session中
+		if (UserName != null)
+		{
+			//首先根据用户名的信息获取到用户详细的信息
+			BaseUser userInfoShow = _userInfoService.LoadEntities(c => c.UserName == UserName).FirstOrDefault();
+			Session["UserInfo"] = userInfoShow;
+		}
+16.当用户修改的时候，那些只能输入数字的文本框非常的不稳定，经常会将数据刷新为空数据                     未解决
+	解决方法:
+17.当对用户进行添加信息的时候提示用户名已存在                                                       为找到信息    未解决
+	解决方法:
+18.对整个项目的注释问题                                                                                 已解决
+	解决方法:对项目从数据访问层到业务逻辑层添加注释信息
+19.根据角色里面的角色分类表，角色应该还有一个分类表，但是现在模拟就行                                   未解决
+	解决方法:
+20.easyUI返回时间的时候返回的格式需要我们解决，两种方式，一种是JQuery解决，另外一种是MVC解决            已解决
+	解决方法:        
+		/// <summary>
+        /// 返回处理过的时间的Json字符串
+        /// </summary>
+        /// <param name="Date"></param>
+        /// <returns></returns>
+        public ContentResult JsonDate(object Date)
+        {
+            var timeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
+            return Content(JsonConvert.SerializeObject(Date, Formatting.Indented, timeConverter));
+        }
+21.用户查询出现了一定的问题，需要后期的修改            未解决
+	解决方法:
+22.            未解决
+	解决方法:
+23.            未解决
+	解决方法:
+
+
